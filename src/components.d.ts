@@ -5,8 +5,33 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { Camera, Scene } from "three";
+import { BufferGeometry, Camera, ColorRepresentation, Material, Object3D, Scene } from "three";
 export namespace Components {
+    interface ThreeBoxGeometry {
+        "depth"?: number;
+        "depthSegments"?: number;
+        "height"?: number;
+        "heightSegments"?: number;
+        "width"?: number;
+        "widthSegments"?: number;
+    }
+    interface ThreeMesh {
+        "geometry": BufferGeometry;
+        "material": Material;
+        /**
+          * Update the geometry for the mesh.
+          * @param geometry the geometry to be added
+         */
+        "updateGeometry": (geometry: BufferGeometry) => Promise<void>;
+        /**
+          * Update the mateiral for the mesh.
+          * @param material the material to be added
+         */
+        "updateMaterial": (material: Material) => Promise<void>;
+    }
+    interface ThreeMeshBasicMaterial {
+        "color"?: ColorRepresentation;
+    }
     interface ThreePerspectiveCamera {
         "aspect"?: number;
         "far"?: number;
@@ -32,9 +57,37 @@ export namespace Components {
         "width": number;
     }
     interface ThreeScene {
+        /**
+          * Add an object into the scene.
+          * @param object the object to be added
+         */
+        "addObject": (object: Object3D) => Promise<void>;
+        /**
+          * Remove an object from the scene.
+          * @param object the object to be removed
+         */
+        "removeObject": (object: Object3D) => Promise<void>;
     }
 }
 declare global {
+    interface HTMLThreeBoxGeometryElement extends Components.ThreeBoxGeometry, HTMLStencilElement {
+    }
+    var HTMLThreeBoxGeometryElement: {
+        prototype: HTMLThreeBoxGeometryElement;
+        new (): HTMLThreeBoxGeometryElement;
+    };
+    interface HTMLThreeMeshElement extends Components.ThreeMesh, HTMLStencilElement {
+    }
+    var HTMLThreeMeshElement: {
+        prototype: HTMLThreeMeshElement;
+        new (): HTMLThreeMeshElement;
+    };
+    interface HTMLThreeMeshBasicMaterialElement extends Components.ThreeMeshBasicMaterial, HTMLStencilElement {
+    }
+    var HTMLThreeMeshBasicMaterialElement: {
+        prototype: HTMLThreeMeshBasicMaterialElement;
+        new (): HTMLThreeMeshBasicMaterialElement;
+    };
     interface HTMLThreePerspectiveCameraElement extends Components.ThreePerspectiveCamera, HTMLStencilElement {
     }
     var HTMLThreePerspectiveCameraElement: {
@@ -54,12 +107,30 @@ declare global {
         new (): HTMLThreeSceneElement;
     };
     interface HTMLElementTagNameMap {
+        "three-box-geometry": HTMLThreeBoxGeometryElement;
+        "three-mesh": HTMLThreeMeshElement;
+        "three-mesh-basic-material": HTMLThreeMeshBasicMaterialElement;
         "three-perspective-camera": HTMLThreePerspectiveCameraElement;
         "three-renderer": HTMLThreeRendererElement;
         "three-scene": HTMLThreeSceneElement;
     }
 }
 declare namespace LocalJSX {
+    interface ThreeBoxGeometry {
+        "depth"?: number;
+        "depthSegments"?: number;
+        "height"?: number;
+        "heightSegments"?: number;
+        "width"?: number;
+        "widthSegments"?: number;
+    }
+    interface ThreeMesh {
+        "geometry"?: BufferGeometry;
+        "material"?: Material;
+    }
+    interface ThreeMeshBasicMaterial {
+        "color"?: ColorRepresentation;
+    }
     interface ThreePerspectiveCamera {
         "aspect"?: number;
         "far"?: number;
@@ -77,6 +148,9 @@ declare namespace LocalJSX {
     interface ThreeScene {
     }
     interface IntrinsicElements {
+        "three-box-geometry": ThreeBoxGeometry;
+        "three-mesh": ThreeMesh;
+        "three-mesh-basic-material": ThreeMeshBasicMaterial;
         "three-perspective-camera": ThreePerspectiveCamera;
         "three-renderer": ThreeRenderer;
         "three-scene": ThreeScene;
@@ -86,6 +160,9 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "three-box-geometry": LocalJSX.ThreeBoxGeometry & JSXBase.HTMLAttributes<HTMLThreeBoxGeometryElement>;
+            "three-mesh": LocalJSX.ThreeMesh & JSXBase.HTMLAttributes<HTMLThreeMeshElement>;
+            "three-mesh-basic-material": LocalJSX.ThreeMeshBasicMaterial & JSXBase.HTMLAttributes<HTMLThreeMeshBasicMaterialElement>;
             "three-perspective-camera": LocalJSX.ThreePerspectiveCamera & JSXBase.HTMLAttributes<HTMLThreePerspectiveCameraElement>;
             "three-renderer": LocalJSX.ThreeRenderer & JSXBase.HTMLAttributes<HTMLThreeRendererElement>;
             "three-scene": LocalJSX.ThreeScene & JSXBase.HTMLAttributes<HTMLThreeSceneElement>;

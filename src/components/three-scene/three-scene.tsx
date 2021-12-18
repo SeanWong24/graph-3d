@@ -1,5 +1,5 @@
-import { Component, Host, h, ComponentInterface, Element } from '@stencil/core';
-import { Scene, Mesh, BoxGeometry, MeshBasicMaterial } from 'three';
+import { Component, Host, h, ComponentInterface, Element, Method } from '@stencil/core';
+import { Scene, Object3D } from 'three';
 
 @Component({
   tag: 'three-scene',
@@ -12,10 +12,31 @@ export class ThreeScene implements ComponentInterface {
 
   private scene: Scene;
 
-  componentDidLoad() {
+  connectedCallback() {
     this.scene = new Scene();
-    this.addACube();
     this.notifyChangeToRederer();
+  }
+
+  /**
+   * Add an object into the scene.
+   * @param object the object to be added
+   * 
+   * @internal
+   */
+  @Method()
+  async addObject(object: Object3D) {
+    this.scene?.add(object);
+  }
+
+  /**
+   * Remove an object from the scene.
+   * @param object the object to be removed
+   * 
+   * @internal
+   */
+  @Method()
+  async removeObject(object: Object3D) {
+    this.scene?.remove(object);
   }
 
   render() {
@@ -24,14 +45,6 @@ export class ThreeScene implements ComponentInterface {
         <slot></slot>
       </Host>
     );
-  }
-
-  // TODO remove it later
-  private addACube() {
-    const geometry = new BoxGeometry();
-    const material = new MeshBasicMaterial({ color: 0x00ff00 });
-    const cube = new Mesh(geometry, material);
-    this.scene.add(cube);
   }
 
   private notifyChangeToRederer() {
