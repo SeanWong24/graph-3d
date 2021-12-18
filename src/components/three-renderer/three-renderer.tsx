@@ -38,7 +38,7 @@ export class ThreeRenderer implements ComponentInterface {
   @Method()
   async updateCamera(camera: Camera) {
     this.camera = camera;
-    this.tryAnimate();
+    this.renderScene();
   }
 
   /**
@@ -50,7 +50,7 @@ export class ThreeRenderer implements ComponentInterface {
   @Method()
   async updateScene(scene: Scene) {
     this.scene = scene;
-    this.tryAnimate();
+    this.renderScene();
   }
 
   render() {
@@ -61,14 +61,10 @@ export class ThreeRenderer implements ComponentInterface {
     );
   }
 
-  private tryAnimate() {
+  private renderScene() {
     if (this.renderer && this.camera && this.scene) {
-      this.animate();
+      this.renderer?.render(this.scene, this.camera);
     }
-  }
-
-  private animate() {
-    this.renderer?.render(this.scene, this.camera);
   }
 
   private updateSize() {
