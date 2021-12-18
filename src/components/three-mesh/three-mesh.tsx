@@ -1,5 +1,5 @@
 import { Component, Host, h, ComponentInterface, Prop, Element, Method, Watch } from '@stencil/core';
-import { BufferGeometry, Material, Mesh } from 'three';
+import { BufferGeometry, Material, Mesh, MeshBasicMaterial } from 'three';
 
 @Component({
   tag: 'three-mesh',
@@ -27,7 +27,7 @@ export class ThreeMesh implements ComponentInterface {
   @Watch('material')
   materialChanged(material: Material) {
     if (this.mesh) {
-      this.mesh.material = material || new Material();
+      this.mesh.material = material || new MeshBasicMaterial();
     }
   }
 
