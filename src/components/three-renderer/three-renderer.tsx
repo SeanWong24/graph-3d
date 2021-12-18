@@ -22,10 +22,11 @@ export class ThreeRenderer implements ComponentInterface {
     this.hostElmenet.shadowRoot.innerHTML = '';
     this.renderer = new WebGLRenderer();
     this.hostElmenet.shadowRoot.appendChild(this.renderer.domElement);
+    this.updateSize();
   }
 
   componentWillRender() {
-    this.renderer?.setSize(this.width, this.height, this.updateStyle);
+    this.updateSize();
   }
 
   /**
@@ -39,7 +40,7 @@ export class ThreeRenderer implements ComponentInterface {
     this.camera = camera;
     this.tryAnimate();
   }
-  
+
   /**
    * Update the scene object for the rederer.
    * @param scene the scene object
@@ -61,13 +62,17 @@ export class ThreeRenderer implements ComponentInterface {
   }
 
   private tryAnimate() {
-    if(this.renderer && this.camera && this.scene) {
+    if (this.renderer && this.camera && this.scene) {
       this.animate();
     }
   }
 
   private animate() {
     this.renderer?.render(this.scene, this.camera);
+  }
+
+  private updateSize() {
+    this.renderer?.setSize(this.width, this.height, this.updateStyle);
   }
 
 }
