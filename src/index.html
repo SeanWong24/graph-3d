@@ -12,9 +12,21 @@
 
 <body>
   <three-renderer width="600" height="400">
-    <three-perspective-camera z="5"></three-perspective-camera>
+    <three-perspective-camera></three-perspective-camera>
     <three-scene></three-scene>
   </three-renderer>
+
+  <script>
+    function animate() {
+      requestAnimationFrame(animate);
+      const camera = document.querySelector('three-perspective-camera');
+      if (camera) {
+        const deltaZ = .05;
+        camera.z = (camera.z || 0) + deltaZ;
+      }
+    }
+    animate();
+  </script>
 </body>
 
 </html>
