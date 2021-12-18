@@ -16,8 +16,6 @@ export namespace Components {
         "widthSegments"?: number;
     }
     interface ThreeMesh {
-        "geometry": BufferGeometry;
-        "material": Material;
         "rotationX"?: number;
         "rotationY"?: number;
         "rotationZ"?: number;
@@ -128,8 +126,6 @@ declare namespace LocalJSX {
         "widthSegments"?: number;
     }
     interface ThreeMesh {
-        "geometry"?: BufferGeometry;
-        "material"?: Material;
         "rotationX"?: number;
         "rotationY"?: number;
         "rotationZ"?: number;

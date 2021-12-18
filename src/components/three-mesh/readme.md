@@ -7,13 +7,11 @@
 
 ## Properties
 
-| Property    | Attribute    | Description | Type             | Default     |
-| ----------- | ------------ | ----------- | ---------------- | ----------- |
-| `geometry`  | --           |             | `BufferGeometry` | `undefined` |
-| `material`  | --           |             | `Material`       | `undefined` |
-| `rotationX` | `rotation-x` |             | `number`         | `undefined` |
-| `rotationY` | `rotation-y` |             | `number`         | `undefined` |
-| `rotationZ` | `rotation-z` |             | `number`         | `undefined` |
+| Property    | Attribute    | Description | Type     | Default     |
+| ----------- | ------------ | ----------- | -------- | ----------- |
+| `rotationX` | `rotation-x` |             | `number` | `undefined` |
+| `rotationY` | `rotation-y` |             | `number` | `undefined` |
+| `rotationZ` | `rotation-z` |             | `number` | `undefined` |
 
 
 ----------------------------------------------

@@ -1,5 +1,5 @@
 import { Component, Host, h, ComponentInterface, Prop, Element, Method, Watch } from '@stencil/core';
-import { BufferGeometry, Material, Mesh, MeshBasicMaterial } from 'three';
+import { BufferGeometry, Material, Mesh } from 'three';
 
 @Component({
   tag: 'three-mesh',
@@ -12,24 +12,6 @@ export class ThreeMesh implements ComponentInterface {
 
   private sceneElement: HTMLThreeSceneElement;
   private mesh: Mesh;
-
-  @Prop() geometry: BufferGeometry;
-
-  @Watch('geometry')
-  geometryChanged(geometry: BufferGeometry) {
-    if (this.mesh) {
-      this.mesh.geometry = geometry || new BufferGeometry();
-    }
-  }
-
-  @Prop() material: Material;
-
-  @Watch('material')
-  materialChanged(material: Material) {
-    if (this.mesh) {
-      this.mesh.material = material || new MeshBasicMaterial();
-    }
-  }
 
   @Prop({ reflect: true }) rotationX?: number;
 
@@ -62,19 +44,12 @@ export class ThreeMesh implements ComponentInterface {
   }
 
   connectedCallback() {
-    this.mesh = new Mesh(this.geometry, this.material);
+    this.mesh = new Mesh();
     this.addToScene();
   }
 
   disconnectedCallback() {
     this.removeFromScene();
-  }
-
-  componentShouldUpdate(newVal: any, _oldVal: any, propName: string) {
-    if (this.mesh) {
-      this.mesh[propName] = newVal;
-    }
-    return false;
   }
 
 
@@ -86,7 +61,9 @@ export class ThreeMesh implements ComponentInterface {
    */
   @Method()
   async updateGeometry(geometry: BufferGeometry) {
-    this.geometry = geometry;
+    if (this.mesh) {
+      this.mesh.geometry = geometry;
+    }
   }
 
   /**
@@ -97,7 +74,9 @@ export class ThreeMesh implements ComponentInterface {
    */
   @Method()
   async updateMaterial(material: Material) {
-    this.material = material;
+    if (this.mesh) {
+      this.mesh.material = material;
+    }
   }
 
   render() {
