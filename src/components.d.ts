@@ -5,14 +5,32 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { Camera } from "three";
 export namespace Components {
+    interface ThreePerspectiveCamera {
+        "aspect"?: number;
+        "far"?: number;
+        "fov"?: number;
+        "near"?: number;
+    }
     interface ThreeRenderer {
         "height": number;
+        /**
+          * Update the camera object for the rederer.
+          * @param camera the camera object
+         */
+        "updateCamera": (camera: Camera) => Promise<void>;
         "updateStyle": boolean;
         "width": number;
     }
 }
 declare global {
+    interface HTMLThreePerspectiveCameraElement extends Components.ThreePerspectiveCamera, HTMLStencilElement {
+    }
+    var HTMLThreePerspectiveCameraElement: {
+        prototype: HTMLThreePerspectiveCameraElement;
+        new (): HTMLThreePerspectiveCameraElement;
+    };
     interface HTMLThreeRendererElement extends Components.ThreeRenderer, HTMLStencilElement {
     }
     var HTMLThreeRendererElement: {
@@ -20,16 +38,24 @@ declare global {
         new (): HTMLThreeRendererElement;
     };
     interface HTMLElementTagNameMap {
+        "three-perspective-camera": HTMLThreePerspectiveCameraElement;
         "three-renderer": HTMLThreeRendererElement;
     }
 }
 declare namespace LocalJSX {
+    interface ThreePerspectiveCamera {
+        "aspect"?: number;
+        "far"?: number;
+        "fov"?: number;
+        "near"?: number;
+    }
     interface ThreeRenderer {
         "height"?: number;
         "updateStyle"?: boolean;
         "width"?: number;
     }
     interface IntrinsicElements {
+        "three-perspective-camera": ThreePerspectiveCamera;
         "three-renderer": ThreeRenderer;
     }
 }
@@ -37,6 +63,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "three-perspective-camera": LocalJSX.ThreePerspectiveCamera & JSXBase.HTMLAttributes<HTMLThreePerspectiveCameraElement>;
             "three-renderer": LocalJSX.ThreeRenderer & JSXBase.HTMLAttributes<HTMLThreeRendererElement>;
         }
     }
