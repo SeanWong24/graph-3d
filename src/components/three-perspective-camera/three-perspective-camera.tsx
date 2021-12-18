@@ -21,7 +21,7 @@ export class ThreePerspectiveCamera implements ComponentInterface {
     }
     this.camera.fov = fov;
     this.updateProjectionMatrix();
-    this.notifyChangeToRederer();
+    this.notifyRerender();
   }
 
   @Prop({ reflect: true }) aspect?: number;
@@ -33,7 +33,7 @@ export class ThreePerspectiveCamera implements ComponentInterface {
     }
     this.camera.aspect = aspect;
     this.updateProjectionMatrix();
-    this.notifyChangeToRederer();
+    this.notifyRerender();
   }
 
   @Prop({ reflect: true }) near?: number;
@@ -45,7 +45,7 @@ export class ThreePerspectiveCamera implements ComponentInterface {
     }
     this.camera.near = near;
     this.updateProjectionMatrix();
-    this.notifyChangeToRederer();
+    this.notifyRerender();
   }
 
   @Prop({ reflect: true }) far?: number;
@@ -57,7 +57,7 @@ export class ThreePerspectiveCamera implements ComponentInterface {
     }
     this.camera.far = far;
     this.updateProjectionMatrix();
-    this.notifyChangeToRederer();
+    this.notifyRerender();
   }
 
   @Prop({ reflect: true }) x?: number;
@@ -68,7 +68,7 @@ export class ThreePerspectiveCamera implements ComponentInterface {
       return;
     }
     this.camera.position.x = x;
-    this.notifyChangeToRederer();
+    this.notifyRerender();
   }
 
   @Prop({ reflect: true }) y?: number;
@@ -79,7 +79,7 @@ export class ThreePerspectiveCamera implements ComponentInterface {
       return;
     }
     this.camera.position.y = y;
-    this.notifyChangeToRederer();
+    this.notifyRerender();
   }
 
   @Prop({ reflect: true }) z?: number;
@@ -90,7 +90,7 @@ export class ThreePerspectiveCamera implements ComponentInterface {
       return;
     }
     this.camera.position.z = z;
-    this.notifyChangeToRederer();
+    this.notifyRerender();
   }
 
   componentDidLoad() {
@@ -98,7 +98,7 @@ export class ThreePerspectiveCamera implements ComponentInterface {
     this.camera.position.x = this.x || 0;
     this.camera.position.y = this.y || 0;
     this.camera.position.z = this.z || 0;
-    this.notifyChangeToRederer();
+    this.notifyRerender();
   }
 
   componentShouldUpdate() {
@@ -117,7 +117,7 @@ export class ThreePerspectiveCamera implements ComponentInterface {
     this.camera.updateProjectionMatrix();
   }
 
-  private notifyChangeToRederer() {
+  private notifyRerender() {
     const rendererElement = this.hostElement.parentElement as HTMLThreeRendererElement;
     rendererElement?.updateCamera(this.camera);
   }

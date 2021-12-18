@@ -18,6 +18,9 @@ export namespace Components {
     interface ThreeMesh {
         "geometry": BufferGeometry;
         "material": Material;
+        "rotationX"?: number;
+        "rotationY"?: number;
+        "rotationZ"?: number;
         /**
           * Update the geometry for the mesh.
           * @param geometry the geometry to be added
@@ -127,6 +130,9 @@ declare namespace LocalJSX {
     interface ThreeMesh {
         "geometry"?: BufferGeometry;
         "material"?: Material;
+        "rotationX"?: number;
+        "rotationY"?: number;
+        "rotationZ"?: number;
     }
     interface ThreeMeshBasicMaterial {
         "color"?: ColorRepresentation;

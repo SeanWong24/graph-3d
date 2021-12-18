@@ -31,6 +31,36 @@ export class ThreeMesh implements ComponentInterface {
     }
   }
 
+  @Prop({ reflect: true }) rotationX?: number;
+
+  @Watch('rotationX')
+  rotationXChanged(rotationX: number) {
+    if (this.mesh) {
+      this.mesh.rotation.x = rotationX || 0;
+      this.addToScene();
+    }
+  }
+
+  @Prop({ reflect: true }) rotationY?: number;
+
+  @Watch('rotationY')
+  rotationYChanged(rotationY: number) {
+    if (this.mesh) {
+      this.mesh.rotation.y = rotationY || 0;
+      this.addToScene();
+    }
+  }
+
+  @Prop({ reflect: true }) rotationZ?: number;
+
+  @Watch('rotationZ')
+  rotationZChanged(rotationZ: number) {
+    if (this.mesh) {
+      this.mesh.rotation.z = rotationZ || 0;
+      this.addToScene();
+    }
+  }
+
   connectedCallback() {
     this.mesh = new Mesh(this.geometry, this.material);
     this.addToScene();

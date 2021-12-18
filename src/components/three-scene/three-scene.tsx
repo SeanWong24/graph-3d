@@ -14,7 +14,7 @@ export class ThreeScene implements ComponentInterface {
 
   connectedCallback() {
     this.scene = new Scene();
-    this.notifyChangeToRederer();
+    this.notifyRerender();
   }
 
   /**
@@ -26,6 +26,7 @@ export class ThreeScene implements ComponentInterface {
   @Method()
   async addObject(object: Object3D) {
     this.scene?.add(object);
+    this.notifyRerender();
   }
 
   /**
@@ -37,6 +38,7 @@ export class ThreeScene implements ComponentInterface {
   @Method()
   async removeObject(object: Object3D) {
     this.scene?.remove(object);
+    this.notifyRerender();
   }
 
   render() {
@@ -47,7 +49,7 @@ export class ThreeScene implements ComponentInterface {
     );
   }
 
-  private notifyChangeToRederer() {
+  private notifyRerender() {
     const rendererElement = this.hostElement.parentElement as HTMLThreeRendererElement;
     rendererElement?.updateScene(this.scene);
   }
