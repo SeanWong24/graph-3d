@@ -5,7 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { Camera } from "three";
+import { Camera, Scene } from "three";
 export namespace Components {
     interface ThreePerspectiveCamera {
         "aspect"?: number;
@@ -20,8 +20,15 @@ export namespace Components {
           * @param camera the camera object
          */
         "updateCamera": (camera: Camera) => Promise<void>;
+        /**
+          * Update the scene object for the rederer.
+          * @param scene the scene object
+         */
+        "updateScene": (scene: Scene) => Promise<void>;
         "updateStyle": boolean;
         "width": number;
+    }
+    interface ThreeScene {
     }
 }
 declare global {
@@ -37,9 +44,16 @@ declare global {
         prototype: HTMLThreeRendererElement;
         new (): HTMLThreeRendererElement;
     };
+    interface HTMLThreeSceneElement extends Components.ThreeScene, HTMLStencilElement {
+    }
+    var HTMLThreeSceneElement: {
+        prototype: HTMLThreeSceneElement;
+        new (): HTMLThreeSceneElement;
+    };
     interface HTMLElementTagNameMap {
         "three-perspective-camera": HTMLThreePerspectiveCameraElement;
         "three-renderer": HTMLThreeRendererElement;
+        "three-scene": HTMLThreeSceneElement;
     }
 }
 declare namespace LocalJSX {
@@ -54,9 +68,12 @@ declare namespace LocalJSX {
         "updateStyle"?: boolean;
         "width"?: number;
     }
+    interface ThreeScene {
+    }
     interface IntrinsicElements {
         "three-perspective-camera": ThreePerspectiveCamera;
         "three-renderer": ThreeRenderer;
+        "three-scene": ThreeScene;
     }
 }
 export { LocalJSX as JSX };
@@ -65,6 +82,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "three-perspective-camera": LocalJSX.ThreePerspectiveCamera & JSXBase.HTMLAttributes<HTMLThreePerspectiveCameraElement>;
             "three-renderer": LocalJSX.ThreeRenderer & JSXBase.HTMLAttributes<HTMLThreeRendererElement>;
+            "three-scene": LocalJSX.ThreeScene & JSXBase.HTMLAttributes<HTMLThreeSceneElement>;
         }
     }
 }

@@ -1,5 +1,5 @@
 import { Component, Host, h, ComponentInterface, Prop, Element, Method } from '@stencil/core';
-import { Renderer, WebGLRenderer, Camera } from 'three';
+import { Renderer, WebGLRenderer, Camera, Scene } from 'three';
 
 @Component({
   tag: 'three-renderer',
@@ -10,6 +10,7 @@ export class ThreeRenderer implements ComponentInterface {
 
   private renderer: Renderer;
   private camera: Camera;
+  private scene: Scene;
 
   @Element() hostElmenet: HTMLThreeRendererElement;
 
@@ -38,6 +39,18 @@ export class ThreeRenderer implements ComponentInterface {
     this.camera = camera;
     this.tryAnimate();
   }
+  
+  /**
+   * Update the scene object for the rederer.
+   * @param scene the scene object
+   * 
+   * @internal
+   */
+  @Method()
+  async updateScene(scene: Scene) {
+    this.scene = scene;
+    this.tryAnimate();
+  }
 
   render() {
     return (
@@ -48,13 +61,13 @@ export class ThreeRenderer implements ComponentInterface {
   }
 
   private tryAnimate() {
-    if(this.renderer && this.camera) {
+    if(this.renderer && this.camera && this.scene) {
       this.animate();
     }
   }
 
   private animate() {
-    this.renderer?.render(null, this.camera);
+    this.renderer?.render(this.scene, this.camera);
   }
 
 }
