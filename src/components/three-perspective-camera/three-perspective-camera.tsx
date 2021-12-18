@@ -16,6 +16,9 @@ export class ThreePerspectiveCamera implements ComponentInterface {
 
   @Watch('fov')
   fovChanged(fov?: number) {
+    if (!this.camera) {
+      return;
+    }
     this.camera.fov = fov;
     this.updateProjectionMatrix();
     this.notifyChangeToRederer();
@@ -25,6 +28,9 @@ export class ThreePerspectiveCamera implements ComponentInterface {
 
   @Watch('aspect')
   aspectChanged(aspect?: number) {
+    if (!this.camera) {
+      return;
+    }
     this.camera.aspect = aspect;
     this.updateProjectionMatrix();
     this.notifyChangeToRederer();
@@ -34,6 +40,9 @@ export class ThreePerspectiveCamera implements ComponentInterface {
 
   @Watch('near')
   nearChanged(near?: number) {
+    if (!this.camera) {
+      return;
+    }
     this.camera.near = near;
     this.updateProjectionMatrix();
     this.notifyChangeToRederer();
@@ -43,6 +52,9 @@ export class ThreePerspectiveCamera implements ComponentInterface {
 
   @Watch('far')
   farChanged(far?: number) {
+    if (!this.camera) {
+      return;
+    }
     this.camera.far = far;
     this.updateProjectionMatrix();
     this.notifyChangeToRederer();
@@ -52,6 +64,9 @@ export class ThreePerspectiveCamera implements ComponentInterface {
 
   @Watch('x')
   xChanged(x: number = 0) {
+    if (!this.camera) {
+      return;
+    }
     this.camera.position.x = x;
     this.notifyChangeToRederer();
   }
@@ -60,6 +75,9 @@ export class ThreePerspectiveCamera implements ComponentInterface {
 
   @Watch('y')
   yChanged(y: number = 0) {
+    if (!this.camera) {
+      return;
+    }
     this.camera.position.y = y;
     this.notifyChangeToRederer();
   }
@@ -68,6 +86,9 @@ export class ThreePerspectiveCamera implements ComponentInterface {
 
   @Watch('z')
   zChanged(z: number = 0) {
+    if (!this.camera) {
+      return;
+    }
     this.camera.position.z = z;
     this.notifyChangeToRederer();
   }
