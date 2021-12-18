@@ -1,4 +1,4 @@
-import { Component, Host, h, ComponentInterface, Prop, Element } from '@stencil/core';
+import { Component, Host, h, ComponentInterface, Prop, Element, Watch } from '@stencil/core';
 import { PerspectiveCamera } from 'three';
 
 @Component({
@@ -12,23 +12,76 @@ export class ThreePerspectiveCamera implements ComponentInterface {
 
   @Element() hostElement: HTMLThreePerspectiveCameraElement;
 
-  @Prop() fov?: number;
-  @Prop() aspect?: number;
-  @Prop() near?: number;
-  @Prop() far?: number;
+  @Prop({ reflect: true }) fov?: number;
 
-  componentDidLoad() {
-    this.camera = new PerspectiveCamera();
-    const rendererElement = this.hostElement.parentElement as HTMLThreeRendererElement;
-    rendererElement?.updateCamera(this.camera);
+  @Watch('fov')
+  fovChanged(fov?: number) {
+    this.camera.fov = fov;
+    this.updateProjectionMatrix();
+    this.notifyChangeToRederer();
   }
 
-  componentWillRender() {
-    this.camera.fov = this.fov;
-    this.camera.aspect = this.aspect;
-    this.camera.near = this.near;
-    this.camera.far = this.far;
-    this.camera.updateProjectionMatrix();
+  @Prop({ reflect: true }) aspect?: number;
+
+  @Watch('aspect')
+  aspectChanged(aspect?: number) {
+    this.camera.aspect = aspect;
+    this.updateProjectionMatrix();
+    this.notifyChangeToRederer();
+  }
+
+  @Prop({ reflect: true }) near?: number;
+
+  @Watch('near')
+  nearChanged(near?: number) {
+    this.camera.near = near;
+    this.updateProjectionMatrix();
+    this.notifyChangeToRederer();
+  }
+
+  @Prop({ reflect: true }) far?: number;
+
+  @Watch('far')
+  farChanged(far?: number) {
+    this.camera.far = far;
+    this.updateProjectionMatrix();
+    this.notifyChangeToRederer();
+  }
+
+  @Prop({ reflect: true }) x?: number;
+
+  @Watch('x')
+  xChanged(x: number = 0) {
+    this.camera.position.x = x;
+    this.notifyChangeToRederer();
+  }
+
+  @Prop({ reflect: true }) y?: number;
+
+  @Watch('y')
+  yChanged(y: number = 0) {
+    this.camera.position.y = y;
+    this.notifyChangeToRederer();
+  }
+
+  @Prop({ reflect: true }) z?: number;
+
+  @Watch('z')
+  zChanged(z: number = 0) {
+    this.camera.position.z = z;
+    this.notifyChangeToRederer();
+  }
+
+  componentDidLoad() {
+    this.camera = new PerspectiveCamera(this.fov, this.aspect, this.near, this.far);
+    this.camera.position.x = this.x || 0;
+    this.camera.position.y = this.y || 0;
+    this.camera.position.z = this.z || 0;
+    this.notifyChangeToRederer();
+  }
+
+  componentShouldUpdate() {
+    return false;
   }
 
   render() {
@@ -37,6 +90,15 @@ export class ThreePerspectiveCamera implements ComponentInterface {
         <slot></slot>
       </Host>
     );
+  }
+
+  private updateProjectionMatrix() {
+    this.camera.updateProjectionMatrix();
+  }
+
+  private notifyChangeToRederer() {
+    const rendererElement = this.hostElement.parentElement as HTMLThreeRendererElement;
+    rendererElement?.updateCamera(this.camera);
   }
 
 }

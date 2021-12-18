@@ -13,6 +13,9 @@
 | `far`    | `far`     |             | `number` | `undefined` |
 | `fov`    | `fov`     |             | `number` | `undefined` |
 | `near`   | `near`    |             | `number` | `undefined` |
+| `x`      | `x`       |             | `number` | `undefined` |
+| `y`      | `y`       |             | `number` | `undefined` |
+| `z`      | `z`       |             | `number` | `undefined` |
 
 
 ----------------------------------------------

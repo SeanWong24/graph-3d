@@ -15,8 +15,7 @@ export class ThreeScene implements ComponentInterface {
   componentDidLoad() {
     this.scene = new Scene();
     this.addACube();
-    const rendererElement = this.hostElement.parentElement as HTMLThreeRendererElement;
-    rendererElement?.updateScene(this.scene);
+    this.notifyChangeToRederer();
   }
 
   render() {
@@ -33,6 +32,11 @@ export class ThreeScene implements ComponentInterface {
     const material = new MeshBasicMaterial({ color: 0x00ff00 });
     const cube = new Mesh(geometry, material);
     this.scene.add(cube);
+  }
+
+  private notifyChangeToRederer() {
+    const rendererElement = this.hostElement.parentElement as HTMLThreeRendererElement;
+    rendererElement?.updateScene(this.scene);
   }
 
 }

@@ -12,6 +12,9 @@ export namespace Components {
         "far"?: number;
         "fov"?: number;
         "near"?: number;
+        "x"?: number;
+        "y"?: number;
+        "z"?: number;
     }
     interface ThreeRenderer {
         "height": number;
@@ -62,6 +65,9 @@ declare namespace LocalJSX {
         "far"?: number;
         "fov"?: number;
         "near"?: number;
+        "x"?: number;
+        "y"?: number;
+        "z"?: number;
     }
     interface ThreeRenderer {
         "height"?: number;
