@@ -6,20 +6,38 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
-
+    interface ThreeRenderer {
+        "height": number;
+        "updateStyle": boolean;
+        "width": number;
+    }
 }
 declare global {
+    interface HTMLThreeRendererElement extends Components.ThreeRenderer, HTMLStencilElement {
+    }
+    var HTMLThreeRendererElement: {
+        prototype: HTMLThreeRendererElement;
+        new (): HTMLThreeRendererElement;
+    };
     interface HTMLElementTagNameMap {
+        "three-renderer": HTMLThreeRendererElement;
     }
 }
 declare namespace LocalJSX {
+    interface ThreeRenderer {
+        "height"?: number;
+        "updateStyle"?: boolean;
+        "width"?: number;
+    }
     interface IntrinsicElements {
+        "three-renderer": ThreeRenderer;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "three-renderer": LocalJSX.ThreeRenderer & JSXBase.HTMLAttributes<HTMLThreeRendererElement>;
         }
     }
 }
