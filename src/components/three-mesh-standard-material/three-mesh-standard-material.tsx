@@ -1,4 +1,4 @@
-import { Component, Host, h, ComponentInterface, Element, Prop } from '@stencil/core';
+import { Component, Host, h, ComponentInterface, Element, Prop, Method } from '@stencil/core';
 import { ColorRepresentation, MeshStandardMaterial, MeshStandardMaterialParameters, Texture } from 'three';
 
 @Component({
@@ -6,15 +6,15 @@ import { ColorRepresentation, MeshStandardMaterial, MeshStandardMaterialParamete
   styleUrl: 'three-mesh-standard-material.css',
   shadow: true,
 })
-export class ThreeMeshStandardMaterial implements ComponentInterface, MeshStandardMaterialParameters{
+export class ThreeMeshStandardMaterial implements ComponentInterface, MeshStandardMaterialParameters {
 
   private meshElement: HTMLThreeMeshElement;
   private material: MeshStandardMaterial;
 
   map?: Texture;
-  
+
   @Element() hostElement: HTMLThreeMeshStandardMaterialElement;
-  
+
   @Prop() color?: ColorRepresentation;
 
   connectedCallback() {
@@ -34,6 +34,24 @@ export class ThreeMeshStandardMaterial implements ComponentInterface, MeshStanda
       this.material[propName] = newVal;
     }
     return false;
+  }
+
+  /**
+ * Update the map for the material.
+ * @param texture the texture to be added
+ * @param map the map to apply the texture on
+ * 
+ * @internal
+ */
+  @Method()
+  async updateMap(texture: Texture, map: string) {
+    if (this.material) {
+      switch (map) {
+        default:
+          this.material.map = texture;
+          break;
+      }
+    }
   }
 
   render() {

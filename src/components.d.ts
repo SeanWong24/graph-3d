@@ -5,7 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { BufferGeometry, Camera, ColorRepresentation, Material, Object3D, Scene } from "three";
+import { BufferGeometry, Camera, ColorRepresentation, Material, Object3D, Scene, Texture } from "three";
 export namespace Components {
     interface ThreeAmbientLight {
         "color"?: ColorRepresentation;
@@ -39,6 +39,12 @@ export namespace Components {
     }
     interface ThreeMeshStandardMaterial {
         "color"?: ColorRepresentation;
+        /**
+          * Update the map for the material.
+          * @param texture the texture to be added
+          * @param map the map to apply the texture on
+         */
+        "updateMap": (texture: Texture, map: string) => Promise<void>;
     }
     interface ThreePerspectiveCamera {
         "aspect"?: number;
@@ -75,6 +81,10 @@ export namespace Components {
           * @param object the object to be removed
          */
         "removeObject": (object: Object3D) => Promise<void>;
+    }
+    interface ThreeTexture {
+        "map": string;
+        "src": string;
     }
 }
 declare global {
@@ -126,6 +136,12 @@ declare global {
         prototype: HTMLThreeSceneElement;
         new (): HTMLThreeSceneElement;
     };
+    interface HTMLThreeTextureElement extends Components.ThreeTexture, HTMLStencilElement {
+    }
+    var HTMLThreeTextureElement: {
+        prototype: HTMLThreeTextureElement;
+        new (): HTMLThreeTextureElement;
+    };
     interface HTMLElementTagNameMap {
         "three-ambient-light": HTMLThreeAmbientLightElement;
         "three-box-geometry": HTMLThreeBoxGeometryElement;
@@ -135,6 +151,7 @@ declare global {
         "three-perspective-camera": HTMLThreePerspectiveCameraElement;
         "three-renderer": HTMLThreeRendererElement;
         "three-scene": HTMLThreeSceneElement;
+        "three-texture": HTMLThreeTextureElement;
     }
 }
 declare namespace LocalJSX {
@@ -177,6 +194,10 @@ declare namespace LocalJSX {
     }
     interface ThreeScene {
     }
+    interface ThreeTexture {
+        "map"?: string;
+        "src"?: string;
+    }
     interface IntrinsicElements {
         "three-ambient-light": ThreeAmbientLight;
         "three-box-geometry": ThreeBoxGeometry;
@@ -186,6 +207,7 @@ declare namespace LocalJSX {
         "three-perspective-camera": ThreePerspectiveCamera;
         "three-renderer": ThreeRenderer;
         "three-scene": ThreeScene;
+        "three-texture": ThreeTexture;
     }
 }
 export { LocalJSX as JSX };
@@ -200,6 +222,7 @@ declare module "@stencil/core" {
             "three-perspective-camera": LocalJSX.ThreePerspectiveCamera & JSXBase.HTMLAttributes<HTMLThreePerspectiveCameraElement>;
             "three-renderer": LocalJSX.ThreeRenderer & JSXBase.HTMLAttributes<HTMLThreeRendererElement>;
             "three-scene": LocalJSX.ThreeScene & JSXBase.HTMLAttributes<HTMLThreeSceneElement>;
+            "three-texture": LocalJSX.ThreeTexture & JSXBase.HTMLAttributes<HTMLThreeTextureElement>;
         }
     }
 }
