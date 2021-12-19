@@ -7,6 +7,10 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { BufferGeometry, Camera, ColorRepresentation, Material, Object3D, Scene } from "three";
 export namespace Components {
+    interface ThreeAmbientLight {
+        "color"?: ColorRepresentation;
+        "intensity"?: number;
+    }
     interface ThreeBoxGeometry {
         "depth"?: number;
         "depthSegments"?: number;
@@ -74,6 +78,12 @@ export namespace Components {
     }
 }
 declare global {
+    interface HTMLThreeAmbientLightElement extends Components.ThreeAmbientLight, HTMLStencilElement {
+    }
+    var HTMLThreeAmbientLightElement: {
+        prototype: HTMLThreeAmbientLightElement;
+        new (): HTMLThreeAmbientLightElement;
+    };
     interface HTMLThreeBoxGeometryElement extends Components.ThreeBoxGeometry, HTMLStencilElement {
     }
     var HTMLThreeBoxGeometryElement: {
@@ -117,6 +127,7 @@ declare global {
         new (): HTMLThreeSceneElement;
     };
     interface HTMLElementTagNameMap {
+        "three-ambient-light": HTMLThreeAmbientLightElement;
         "three-box-geometry": HTMLThreeBoxGeometryElement;
         "three-mesh": HTMLThreeMeshElement;
         "three-mesh-basic-material": HTMLThreeMeshBasicMaterialElement;
@@ -127,6 +138,10 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    interface ThreeAmbientLight {
+        "color"?: ColorRepresentation;
+        "intensity"?: number;
+    }
     interface ThreeBoxGeometry {
         "depth"?: number;
         "depthSegments"?: number;
@@ -163,6 +178,7 @@ declare namespace LocalJSX {
     interface ThreeScene {
     }
     interface IntrinsicElements {
+        "three-ambient-light": ThreeAmbientLight;
         "three-box-geometry": ThreeBoxGeometry;
         "three-mesh": ThreeMesh;
         "three-mesh-basic-material": ThreeMeshBasicMaterial;
@@ -176,6 +192,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "three-ambient-light": LocalJSX.ThreeAmbientLight & JSXBase.HTMLAttributes<HTMLThreeAmbientLightElement>;
             "three-box-geometry": LocalJSX.ThreeBoxGeometry & JSXBase.HTMLAttributes<HTMLThreeBoxGeometryElement>;
             "three-mesh": LocalJSX.ThreeMesh & JSXBase.HTMLAttributes<HTMLThreeMeshElement>;
             "three-mesh-basic-material": LocalJSX.ThreeMeshBasicMaterial & JSXBase.HTMLAttributes<HTMLThreeMeshBasicMaterialElement>;
