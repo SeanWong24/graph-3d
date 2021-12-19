@@ -33,6 +33,9 @@ export namespace Components {
     interface ThreeMeshBasicMaterial {
         "color"?: ColorRepresentation;
     }
+    interface ThreeMeshStandardMaterial {
+        "color"?: ColorRepresentation;
+    }
     interface ThreePerspectiveCamera {
         "aspect"?: number;
         "far"?: number;
@@ -89,6 +92,12 @@ declare global {
         prototype: HTMLThreeMeshBasicMaterialElement;
         new (): HTMLThreeMeshBasicMaterialElement;
     };
+    interface HTMLThreeMeshStandardMaterialElement extends Components.ThreeMeshStandardMaterial, HTMLStencilElement {
+    }
+    var HTMLThreeMeshStandardMaterialElement: {
+        prototype: HTMLThreeMeshStandardMaterialElement;
+        new (): HTMLThreeMeshStandardMaterialElement;
+    };
     interface HTMLThreePerspectiveCameraElement extends Components.ThreePerspectiveCamera, HTMLStencilElement {
     }
     var HTMLThreePerspectiveCameraElement: {
@@ -111,6 +120,7 @@ declare global {
         "three-box-geometry": HTMLThreeBoxGeometryElement;
         "three-mesh": HTMLThreeMeshElement;
         "three-mesh-basic-material": HTMLThreeMeshBasicMaterialElement;
+        "three-mesh-standard-material": HTMLThreeMeshStandardMaterialElement;
         "three-perspective-camera": HTMLThreePerspectiveCameraElement;
         "three-renderer": HTMLThreeRendererElement;
         "three-scene": HTMLThreeSceneElement;
@@ -133,6 +143,9 @@ declare namespace LocalJSX {
     interface ThreeMeshBasicMaterial {
         "color"?: ColorRepresentation;
     }
+    interface ThreeMeshStandardMaterial {
+        "color"?: ColorRepresentation;
+    }
     interface ThreePerspectiveCamera {
         "aspect"?: number;
         "far"?: number;
@@ -153,6 +166,7 @@ declare namespace LocalJSX {
         "three-box-geometry": ThreeBoxGeometry;
         "three-mesh": ThreeMesh;
         "three-mesh-basic-material": ThreeMeshBasicMaterial;
+        "three-mesh-standard-material": ThreeMeshStandardMaterial;
         "three-perspective-camera": ThreePerspectiveCamera;
         "three-renderer": ThreeRenderer;
         "three-scene": ThreeScene;
@@ -165,6 +179,7 @@ declare module "@stencil/core" {
             "three-box-geometry": LocalJSX.ThreeBoxGeometry & JSXBase.HTMLAttributes<HTMLThreeBoxGeometryElement>;
             "three-mesh": LocalJSX.ThreeMesh & JSXBase.HTMLAttributes<HTMLThreeMeshElement>;
             "three-mesh-basic-material": LocalJSX.ThreeMeshBasicMaterial & JSXBase.HTMLAttributes<HTMLThreeMeshBasicMaterialElement>;
+            "three-mesh-standard-material": LocalJSX.ThreeMeshStandardMaterial & JSXBase.HTMLAttributes<HTMLThreeMeshStandardMaterialElement>;
             "three-perspective-camera": LocalJSX.ThreePerspectiveCamera & JSXBase.HTMLAttributes<HTMLThreePerspectiveCameraElement>;
             "three-renderer": LocalJSX.ThreeRenderer & JSXBase.HTMLAttributes<HTMLThreeRendererElement>;
             "three-scene": LocalJSX.ThreeScene & JSXBase.HTMLAttributes<HTMLThreeSceneElement>;

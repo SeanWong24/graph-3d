@@ -1,5 +1,5 @@
 import { Component, Host, h, ComponentInterface, Element, Method } from '@stencil/core';
-import { Scene, Object3D } from 'three';
+import { Scene, Object3D, Color } from 'three';
 
 @Component({
   tag: 'three-scene',
@@ -14,6 +14,8 @@ export class ThreeScene implements ComponentInterface {
 
   connectedCallback() {
     this.scene = new Scene();
+    //TODO: delete below
+    this.scene.background = new Color("green");
     this.notifyRerender();
   }
 
