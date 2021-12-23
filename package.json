@@ -24,7 +24,8 @@
     "start.no-open": "stencil build --dev --watch --serve --no-open",
     "test": "stencil test --spec --e2e",
     "test.watch": "stencil test --spec --e2e --watchAll",
-    "generate": "stencil generate"
+    "generate": "stencil generate",
+    "prepare": "npm run build"
   },
   "devDependencies": {
     "@stencil/core": "^2.11.0",
