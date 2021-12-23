@@ -5,8 +5,12 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { BufferGeometry, Camera, ColorRepresentation, Material, Object3D, Scene } from "three";
+import { BufferGeometry, Camera, ColorRepresentation, Material, Object3D, Scene, Texture } from "three";
 export namespace Components {
+    interface ThreeAmbientLight {
+        "color"?: ColorRepresentation;
+        "intensity"?: number;
+    }
     interface ThreeBoxGeometry {
         "depth"?: number;
         "depthSegments"?: number;
@@ -32,6 +36,15 @@ export namespace Components {
     }
     interface ThreeMeshBasicMaterial {
         "color"?: ColorRepresentation;
+    }
+    interface ThreeMeshStandardMaterial {
+        "color"?: ColorRepresentation;
+        /**
+          * Update the map for the material.
+          * @param texture the texture to be added
+          * @param map the map to apply the texture on
+         */
+        "updateMap": (texture: Texture, map: string) => Promise<void>;
     }
     interface ThreePerspectiveCamera {
         "aspect"?: number;
@@ -69,8 +82,18 @@ export namespace Components {
          */
         "removeObject": (object: Object3D) => Promise<void>;
     }
+    interface ThreeTexture {
+        "map": string;
+        "src": string;
+    }
 }
 declare global {
+    interface HTMLThreeAmbientLightElement extends Components.ThreeAmbientLight, HTMLStencilElement {
+    }
+    var HTMLThreeAmbientLightElement: {
+        prototype: HTMLThreeAmbientLightElement;
+        new (): HTMLThreeAmbientLightElement;
+    };
     interface HTMLThreeBoxGeometryElement extends Components.ThreeBoxGeometry, HTMLStencilElement {
     }
     var HTMLThreeBoxGeometryElement: {
@@ -88,6 +111,12 @@ declare global {
     var HTMLThreeMeshBasicMaterialElement: {
         prototype: HTMLThreeMeshBasicMaterialElement;
         new (): HTMLThreeMeshBasicMaterialElement;
+    };
+    interface HTMLThreeMeshStandardMaterialElement extends Components.ThreeMeshStandardMaterial, HTMLStencilElement {
+    }
+    var HTMLThreeMeshStandardMaterialElement: {
+        prototype: HTMLThreeMeshStandardMaterialElement;
+        new (): HTMLThreeMeshStandardMaterialElement;
     };
     interface HTMLThreePerspectiveCameraElement extends Components.ThreePerspectiveCamera, HTMLStencilElement {
     }
@@ -107,16 +136,29 @@ declare global {
         prototype: HTMLThreeSceneElement;
         new (): HTMLThreeSceneElement;
     };
+    interface HTMLThreeTextureElement extends Components.ThreeTexture, HTMLStencilElement {
+    }
+    var HTMLThreeTextureElement: {
+        prototype: HTMLThreeTextureElement;
+        new (): HTMLThreeTextureElement;
+    };
     interface HTMLElementTagNameMap {
+        "three-ambient-light": HTMLThreeAmbientLightElement;
         "three-box-geometry": HTMLThreeBoxGeometryElement;
         "three-mesh": HTMLThreeMeshElement;
         "three-mesh-basic-material": HTMLThreeMeshBasicMaterialElement;
+        "three-mesh-standard-material": HTMLThreeMeshStandardMaterialElement;
         "three-perspective-camera": HTMLThreePerspectiveCameraElement;
         "three-renderer": HTMLThreeRendererElement;
         "three-scene": HTMLThreeSceneElement;
+        "three-texture": HTMLThreeTextureElement;
     }
 }
 declare namespace LocalJSX {
+    interface ThreeAmbientLight {
+        "color"?: ColorRepresentation;
+        "intensity"?: number;
+    }
     interface ThreeBoxGeometry {
         "depth"?: number;
         "depthSegments"?: number;
@@ -131,6 +173,9 @@ declare namespace LocalJSX {
         "rotationZ"?: number;
     }
     interface ThreeMeshBasicMaterial {
+        "color"?: ColorRepresentation;
+    }
+    interface ThreeMeshStandardMaterial {
         "color"?: ColorRepresentation;
     }
     interface ThreePerspectiveCamera {
@@ -149,25 +194,35 @@ declare namespace LocalJSX {
     }
     interface ThreeScene {
     }
+    interface ThreeTexture {
+        "map"?: string;
+        "src"?: string;
+    }
     interface IntrinsicElements {
+        "three-ambient-light": ThreeAmbientLight;
         "three-box-geometry": ThreeBoxGeometry;
         "three-mesh": ThreeMesh;
         "three-mesh-basic-material": ThreeMeshBasicMaterial;
+        "three-mesh-standard-material": ThreeMeshStandardMaterial;
         "three-perspective-camera": ThreePerspectiveCamera;
         "three-renderer": ThreeRenderer;
         "three-scene": ThreeScene;
+        "three-texture": ThreeTexture;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "three-ambient-light": LocalJSX.ThreeAmbientLight & JSXBase.HTMLAttributes<HTMLThreeAmbientLightElement>;
             "three-box-geometry": LocalJSX.ThreeBoxGeometry & JSXBase.HTMLAttributes<HTMLThreeBoxGeometryElement>;
             "three-mesh": LocalJSX.ThreeMesh & JSXBase.HTMLAttributes<HTMLThreeMeshElement>;
             "three-mesh-basic-material": LocalJSX.ThreeMeshBasicMaterial & JSXBase.HTMLAttributes<HTMLThreeMeshBasicMaterialElement>;
+            "three-mesh-standard-material": LocalJSX.ThreeMeshStandardMaterial & JSXBase.HTMLAttributes<HTMLThreeMeshStandardMaterialElement>;
             "three-perspective-camera": LocalJSX.ThreePerspectiveCamera & JSXBase.HTMLAttributes<HTMLThreePerspectiveCameraElement>;
             "three-renderer": LocalJSX.ThreeRenderer & JSXBase.HTMLAttributes<HTMLThreeRendererElement>;
             "three-scene": LocalJSX.ThreeScene & JSXBase.HTMLAttributes<HTMLThreeSceneElement>;
+            "three-texture": LocalJSX.ThreeTexture & JSXBase.HTMLAttributes<HTMLThreeTextureElement>;
         }
     }
 }
