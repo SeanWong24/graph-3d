@@ -82,6 +82,11 @@ export namespace Components {
          */
         "removeObject": (object: Object3D) => Promise<void>;
     }
+    interface ThreeSphereGeometry {
+        "heightSegments"?: number;
+        "radius"?: number;
+        "widthSegments"?: number;
+    }
     interface ThreeTexture {
         "map": string;
         "src": string;
@@ -136,6 +141,12 @@ declare global {
         prototype: HTMLThreeSceneElement;
         new (): HTMLThreeSceneElement;
     };
+    interface HTMLThreeSphereGeometryElement extends Components.ThreeSphereGeometry, HTMLStencilElement {
+    }
+    var HTMLThreeSphereGeometryElement: {
+        prototype: HTMLThreeSphereGeometryElement;
+        new (): HTMLThreeSphereGeometryElement;
+    };
     interface HTMLThreeTextureElement extends Components.ThreeTexture, HTMLStencilElement {
     }
     var HTMLThreeTextureElement: {
@@ -151,6 +162,7 @@ declare global {
         "three-perspective-camera": HTMLThreePerspectiveCameraElement;
         "three-renderer": HTMLThreeRendererElement;
         "three-scene": HTMLThreeSceneElement;
+        "three-sphere-geometry": HTMLThreeSphereGeometryElement;
         "three-texture": HTMLThreeTextureElement;
     }
 }
@@ -194,6 +206,11 @@ declare namespace LocalJSX {
     }
     interface ThreeScene {
     }
+    interface ThreeSphereGeometry {
+        "heightSegments"?: number;
+        "radius"?: number;
+        "widthSegments"?: number;
+    }
     interface ThreeTexture {
         "map"?: string;
         "src"?: string;
@@ -207,6 +224,7 @@ declare namespace LocalJSX {
         "three-perspective-camera": ThreePerspectiveCamera;
         "three-renderer": ThreeRenderer;
         "three-scene": ThreeScene;
+        "three-sphere-geometry": ThreeSphereGeometry;
         "three-texture": ThreeTexture;
     }
 }
@@ -222,6 +240,7 @@ declare module "@stencil/core" {
             "three-perspective-camera": LocalJSX.ThreePerspectiveCamera & JSXBase.HTMLAttributes<HTMLThreePerspectiveCameraElement>;
             "three-renderer": LocalJSX.ThreeRenderer & JSXBase.HTMLAttributes<HTMLThreeRendererElement>;
             "three-scene": LocalJSX.ThreeScene & JSXBase.HTMLAttributes<HTMLThreeSceneElement>;
+            "three-sphere-geometry": LocalJSX.ThreeSphereGeometry & JSXBase.HTMLAttributes<HTMLThreeSphereGeometryElement>;
             "three-texture": LocalJSX.ThreeTexture & JSXBase.HTMLAttributes<HTMLThreeTextureElement>;
         }
     }
