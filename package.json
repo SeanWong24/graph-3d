@@ -1,0 +1,27 @@
+{
+  "name": "three-wc",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build && npm run gen-wrappers",
+    "preview": "vite preview",
+    "gen-wrappers": "lit labs gen --framework=react --framework=vue --out=dist/wrappers/",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@lit/context": "^1.1.3",
+    "lit": "^3.2.0",
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "@lit-labs/cli": "^0.6.5",
+    "@lit-labs/gen-wrapper-react": "^0.3.3",
+    "@lit-labs/gen-wrapper-vue": "^0.4.0",
+    "@types/three": "^0.169.0",
+    "tiny-glob": "^0.2.9",
+    "typescript": "^5.5.3",
+    "vite": "^5.4.8"
+  }
+}

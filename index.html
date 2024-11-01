@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three WC</title>
+    <link rel="stylesheet" href="./src/index.css" />
+    <script type="module" src="/src/index.ts"></script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <three-renderer id="renderer">
+      <three-texture
+        id="background-texture"
+        src="./textures/2k_stars_milky_way.webp"
+        color-space="srgb"
+      ></three-texture>
+      <three-texture
+        id="earth-night-texture"
+        src="./textures/2k_earth_nightmap.webp"
+        color-space="srgb"
+      ></three-texture>
+      <three-texture
+        id="earth-day-texture"
+        src="./textures/2k_earth_daymap.webp"
+        color-space="srgb"
+      ></three-texture>
+      <three-texture
+        id="earth-bump-texture"
+        src="./textures/earth_bumpmap.webp"
+      ></three-texture>
+      <three-texture
+        id="earth-normal-texture"
+        src="./textures/2k_earth_normal_map.webp"
+      ></three-texture>
+      <three-texture
+        id="earth-specular-texture"
+        src="./textures/2k_earth_specular_map.webp"
+      ></three-texture>
+      <three-texture
+        id="earth-clouds-texture"
+        src="./textures/2k_earth_clouds.webp"
+        color-space="srgb"
+      ></three-texture>
+      <three-perspective-camera id="camera" z="5"></three-perspective-camera>
+      <three-scene background="background-texture">
+        <three-ambient-light
+          color="white"
+          intensity="0.2"
+        ></three-ambient-light>
+        <three-point-light
+          id="point-light"
+          color="white"
+          intensity="100"
+          decay="1"
+          x="7"
+          y="7"
+          z="10"
+        ></three-point-light>
+        <three-mesh id="earth" rotation-x="0.41">
+          <three-sphere-geometry></three-sphere-geometry>
+          <three-mesh-phong-material
+            color="white"
+            map="earth-day-texture"
+            shininess="100"
+            emissive="black"
+            specular="white"
+            specular-map="earth-specular-texture"
+            bump-map="earth-bump-texture"
+            bump-scale="0.5"
+            normal-map="earth-normal-texture"
+            normal-scale="5 5"
+          >
+          </three-mesh-phong-material>
+        </three-mesh>
+        <three-mesh id="clouds" rotation-x="0.41">
+          <three-sphere-geometry radius="1.02"></three-sphere-geometry>
+          <three-mesh-standard-material
+            map="earth-clouds-texture"
+            transparent
+            opacity="0.2"
+          ></three-mesh-standard-material>
+        </three-mesh>
+        <three-mesh id="dark-earth" x="3" z="-3" rotation-x="0.41">
+          <three-sphere-geometry></three-sphere-geometry>
+          <three-mesh-phong-material
+            color="white"
+            map="earth-night-texture"
+            shininess="50"
+            emissive="black"
+            specular="white"
+            specular-map="earth-specular-texture"
+            bump-map="earth-bump-texture"
+            bump-scale="0.5"
+            normal-map="earth-normal-texture"
+            normal-scale="5 5"
+          >
+          </three-mesh-phong-material>
+          <three-mesh id="dark-earth-clouds" x="3" z="-3" rotation-x="0.41">
+            <three-sphere-geometry radius="1.02"></three-sphere-geometry>
+            <three-mesh-standard-material
+              map="earth-clouds-texture"
+              transparent
+              opacity="0.1"
+            ></three-mesh-standard-material>
+          </three-mesh>
+        </three-mesh>
+      </three-scene>
+    </three-renderer>
+
+    <script>
+      const renderer = document.querySelector("#renderer");
+      const camera = document.querySelector("#camera");
+      renderer.addEventListener("resize", () => {
+        camera.aspect = renderer.clientWidth / renderer.clientHeight;
+      });
+
+      let speedModifier = 1;
+      let time = 0;
+      const speedAlteringFactor = 0.2;
+      const duration = 10000;
+      let lastTime = performance.now();
+      function animate() {
+        const currentTime = performance.now();
+        const deltaTime = currentTime - lastTime;
+        lastTime = currentTime;
+        time += (deltaTime / duration) * 2 * Math.PI;
+        const oscillation = Math.cos(time);
+        speedModifier = 1 + oscillation * speedAlteringFactor;
+
+        let mesh = document.querySelector("#earth");
+        const deltaDegree = -0.0025;
+        if (mesh) {
+          mesh.rotationY = (mesh.rotationY ?? 0) + deltaDegree;
+        }
+        mesh = document.querySelector("#clouds");
+        if (mesh) {
+          mesh.rotationY = (mesh.rotationY ?? 0) + deltaDegree * speedModifier;
+        }
+        mesh = document.querySelector("#dark-earth");
+        if (mesh) {
+          mesh.rotationY = (mesh.rotationY ?? 0) - deltaDegree * speedModifier;
+          mesh.x = 0 + 3 * Math.sin(time);
+          mesh.y = 0 + 1 * Math.cos(time * 2);
+          mesh.z = 0 + 3 * oscillation;
+        }
+        mesh = document.querySelector("#dark-earth-clouds");
+        if (mesh) {
+          mesh.rotationY = (mesh.rotationY ?? 0) - deltaDegree * speedModifier;
+          mesh.x = 0 + 3 * Math.sin(time);
+          mesh.y = 0 + 1 * Math.cos(time * 2);
+          mesh.z = 0 + 3 * oscillation;
+        }
+
+        const camera = document.querySelector("#camera");
+        camera.rotationY =
+          (camera.rotationY ?? 0) + 0.0005 * Math.cos(time / 2);
+        camera.z = (camera.z ?? 5) + 0.03 * Math.sin(time / 2);
+
+        requestAnimationFrame(animate);
+      }
+      animate();
+    </script>
+  </body>
+</html>
