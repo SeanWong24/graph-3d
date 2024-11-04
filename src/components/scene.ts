@@ -3,7 +3,7 @@ import { LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { Scene, Object3D, Color } from "three";
 import { rendererContext, RendererContext } from "../utils/context/renderer";
-import { sceneContext, SceneContext } from "../utils/context/scene";
+import { object3DContext, Object3DContext } from "../utils/context/object-3d";
 
 @customElement("three-scene")
 export class ThreeScene extends LitElement {
@@ -28,8 +28,8 @@ export class ThreeScene extends LitElement {
   @consume({ context: rendererContext })
   _rendererContext?: RendererContext;
 
-  @provide({ context: sceneContext })
-  context: SceneContext = {
+  @provide({ context: object3DContext })
+  context: Object3DContext = {
     addObject: (obj) => this.#addObject(obj),
     removeObject: (obj) => this.#removeObject(obj),
   };
@@ -37,7 +37,7 @@ export class ThreeScene extends LitElement {
   constructor() {
     super();
     this.#scene = new Scene();
-    this.context.scene = this.#scene;
+    this.context.object = this.#scene;
   }
 
   firstUpdated() {

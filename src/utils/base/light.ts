@@ -2,7 +2,7 @@ import { consume } from "@lit/context";
 import { LitElement } from "lit";
 import { property } from "lit/decorators.js";
 import { ColorRepresentation, Color, Light } from "three";
-import { SceneContext, sceneContext } from "../context/scene";
+import { object3DContext, Object3DContext } from "../context/object-3d";
 
 export abstract class ThreeLightBase<T extends Light> extends LitElement {
   protected _light?: T;
@@ -33,8 +33,8 @@ export abstract class ThreeLightBase<T extends Light> extends LitElement {
     return this.#intensity;
   }
 
-  @consume({ context: sceneContext })
-  protected _sceneContext?: SceneContext;
+  @consume({ context: object3DContext })
+  protected _sceneContext?: Object3DContext;
 
   connectedCallback() {
     super.connectedCallback();

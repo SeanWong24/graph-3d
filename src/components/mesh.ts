@@ -1,9 +1,9 @@
 import { consume, provide } from "@lit/context";
 import { LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { BufferGeometry, Material, Mesh } from "three";
+import { BufferGeometry, Material, Mesh, Object3D } from "three";
 import { rendererContext, RendererContext } from "../utils/context/renderer";
-import { sceneContext, SceneContext } from "../utils/context/scene";
+import { object3DContext, Object3DContext } from "../utils/context/object-3d";
 import { meshContext, MeshContext } from "../utils/context/mesh";
 
 @customElement("three-mesh")
@@ -97,8 +97,14 @@ export class ThreeMesh extends LitElement {
   @consume({ context: rendererContext })
   _rendererContext?: RendererContext;
 
-  @consume({ context: sceneContext })
-  _sceneContext?: SceneContext;
+  @consume({ context: object3DContext })
+  _object3DContext?: Object3DContext;
+
+  @provide({ context: object3DContext })
+  contextObject3D: Object3DContext = {
+    addObject: (obj) => this.#addObject(obj),
+    removeObject: (obj) => this.#removeObject(obj),
+  };
 
   @provide({ context: meshContext })
   context: MeshContext = {
@@ -117,12 +123,12 @@ export class ThreeMesh extends LitElement {
     this.#mesh.rotation.z = this.rotationZ ?? 0;
 
     this.context.mesh = this.#mesh;
-    this._sceneContext?.addObject(this.#mesh);
+    this._object3DContext?.addObject(this.#mesh);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    this._sceneContext?.removeObject(this.#mesh);
+    this._object3DContext?.removeObject(this.#mesh);
   }
 
   render() {
@@ -142,6 +148,22 @@ export class ThreeMesh extends LitElement {
       return;
     }
     this.#mesh.material = material;
+    this._rendererContext?.rerender();
+  }
+
+  #addObject(object?: Object3D) {
+    if (!object) {
+      return;
+    }
+    this.#mesh?.add(object);
+    this._rendererContext?.rerender();
+  }
+
+  #removeObject(object?: Object3D) {
+    if (!object) {
+      return;
+    }
+    this.#mesh?.remove(object);
     this._rendererContext?.rerender();
   }
 }
