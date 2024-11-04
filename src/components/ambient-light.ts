@@ -4,9 +4,7 @@ import { ThreeLightBase } from "../utils/base/light";
 
 @customElement("three-ambient-light")
 export class ThreeAmbientLight extends ThreeLightBase<AmbientLight> {
-  protected override initializeLight() {
-    this._light = new AmbientLight(this.color, this.intensity);
-  }
+  protected override _object = new AmbientLight();
 }
 
 declare global {

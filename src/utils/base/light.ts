@@ -1,33 +1,30 @@
 import { consume } from "@lit/context";
-import { LitElement } from "lit";
 import { property } from "lit/decorators.js";
 import { ColorRepresentation, Color, Light } from "three";
 import { object3DContext, Object3DContext } from "../context/object-3d";
+import { ThreeObject3DBase } from "./object-3d";
 
-export abstract class ThreeLightBase<T extends Light> extends LitElement {
-  protected _light?: T;
-
-  #color?: ColorRepresentation;
+export abstract class ThreeLightBase<
+  T extends Light
+> extends ThreeObject3DBase<T> {
+  #color: ColorRepresentation = "";
   @property()
-  set color(value: ColorRepresentation | undefined) {
+  set color(value: ColorRepresentation) {
     this.#color = value;
-    if (!this._light) {
-      return;
-    }
-    this._light.color = new Color(value ?? "");
+    this._object.color = new Color(value);
   }
   get color() {
     return this.#color;
   }
 
-  #intensity?: number;
+  #intensity: number = 1;
   @property({ type: Number })
-  set intensity(value: number | undefined) {
+  set intensity(value: number) {
     this.#intensity = value;
-    if (!this._light) {
+    if (!this._object) {
       return;
     }
-    this._light.intensity = value ?? 1;
+    this._object.intensity = value;
   }
   get intensity() {
     return this.#intensity;
@@ -38,16 +35,18 @@ export abstract class ThreeLightBase<T extends Light> extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.initializeLight();
-    this._sceneContext?.addObject(this._light);
+    this._object.color = new Color(this.color);
+    this._object.intensity = this.intensity;
+    this._initializeLight();
+    this._sceneContext?.addObject(this._object);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    this._sceneContext?.removeObject(this._light);
+    this._sceneContext?.removeObject(this._object);
   }
 
-  protected abstract initializeLight(): void;
+  protected _initializeLight() {}
 
   render() {
     return null;

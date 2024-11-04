@@ -48,7 +48,10 @@
         src="./textures/2k_earth_clouds.webp"
         color-space="srgb"
       ></three-texture>
-      <three-perspective-camera id="camera" z="5"></three-perspective-camera>
+      <three-perspective-camera
+        id="camera"
+        position="0 0 5"
+      ></three-perspective-camera>
       <three-scene background="background-texture">
         <three-ambient-light
           color="white"
@@ -59,11 +62,9 @@
           color="white"
           intensity="100"
           decay="1"
-          x="7"
-          y="7"
-          z="10"
+          position="7 7 10"
         ></three-point-light>
-        <three-mesh id="earth" rotation-x="0.41">
+        <three-mesh id="earth" rotation="0.41">
           <three-sphere-geometry></three-sphere-geometry>
           <three-mesh-phong-material
             color="white"
@@ -87,7 +88,7 @@
             ></three-mesh-standard-material>
           </three-mesh>
         </three-mesh>
-        <three-mesh id="dark-earth" x="3" z="-3" rotation-x="0.41">
+        <three-mesh id="dark-earth" position="3 0 -3" rotation="0.41">
           <three-sphere-geometry></three-sphere-geometry>
           <three-mesh-phong-material
             color="white"
@@ -136,30 +137,30 @@
 
         let mesh = document.querySelector("#earth");
         const deltaDegree = -0.0025;
-        if (mesh) {
-          mesh.rotationY = (mesh.rotationY ?? 0) + deltaDegree;
+        if (mesh.isReady) {
+          mesh.rotation.y += deltaDegree;
         }
         mesh = document.querySelector("#clouds");
-        if (mesh) {
-          mesh.rotationY = (mesh.rotationY ?? 0) + deltaDegree * speedModifier;
+        if (mesh.isReady) {
+          mesh.rotation.y += deltaDegree * speedModifier;
         }
         mesh = document.querySelector("#dark-earth");
-        if (mesh) {
-          mesh.rotationY =
-            (mesh.rotationY ?? 0) - deltaDegree * (speedModifier + 1);
-          mesh.x = 0 + 3 * Math.sin(time);
-          mesh.y = 0 + 1 * Math.cos(time * 2);
-          mesh.z = 0 + 3 * oscillation;
+        if (mesh.isReady) {
+          mesh.rotation.y -= deltaDegree * (speedModifier + 1);
+          mesh.position.x = 0 + 3 * Math.sin(time);
+          mesh.position.y = 0 + 1 * Math.cos(time * 2);
+          mesh.position.z = 0 + 3 * oscillation;
         }
         mesh = document.querySelector("#dark-earth-clouds");
-        if (mesh) {
-          mesh.rotationY = (mesh.rotationY ?? 0) - deltaDegree * speedModifier;
+        if (mesh.isReady) {
+          mesh.rotation.y -= deltaDegree * speedModifier;
         }
 
         const camera = document.querySelector("#camera");
-        camera.rotationY =
-          (camera.rotationY ?? 0) + 0.0005 * Math.cos(time / 2);
-        camera.z = (camera.z ?? 5) + 0.03 * Math.sin(time / 2);
+        if (camera.isReady) {
+          camera.rotation.y += 0.0005 * Math.cos(time / 2);
+          camera.position.z += 0.03 * Math.sin(time / 2);
+        }
 
         requestAnimationFrame(animate);
       }

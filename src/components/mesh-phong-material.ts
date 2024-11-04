@@ -9,6 +9,7 @@ import {
 } from "three";
 import { meshContext, MeshContext } from "../utils/context/mesh";
 import { ThreeMaterialBase } from "../utils/base/material";
+import { vector2Converter } from "../utils/converter/vector2";
 
 @customElement("three-mesh-phong-material")
 export class ThreeMeshPhongMaterial extends ThreeMaterialBase<MeshPhongMaterial> {
@@ -92,11 +93,7 @@ export class ThreeMeshPhongMaterial extends ThreeMaterialBase<MeshPhongMaterial>
     type: Vector2,
     reflect: true,
     attribute: "normal-scale",
-    converter: {
-      fromAttribute: (value) =>
-        new Vector2(...(value ?? "0 0").split(/\s+/).map((d) => +d)),
-      toAttribute: (value: Vector2) => `${value.x} ${value.y}`,
-    },
+    converter: vector2Converter,
   })
   set normalScale(value: Vector2 | undefined) {
     this.#normalScale = value ?? new Vector2(1, 1);
