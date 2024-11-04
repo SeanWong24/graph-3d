@@ -203,6 +203,53 @@ export class ThreeMeshPhongMaterial extends ThreeMaterialBase<MeshPhongMaterial>
     return this.#specularMap;
   }
 
+  #displacementBias?: number;
+  @property({ type: Number, attribute: "displacement-bias" })
+  set displacementBias(value: number | undefined) {
+    this.#displacementBias = value;
+    if (!this._material) {
+      return;
+    }
+    this._material.displacementBias = value ?? 1;
+    this._material.needsUpdate = true;
+    this._rendererContext?.rerender();
+  }
+  get displacementBias() {
+    return this.#displacementBias;
+  }
+
+  #displacementMap?: string;
+  @property({ reflect: true, attribute: "displacement-map" })
+  set displacementMap(value: string | undefined) {
+    this.#displacementMap = value;
+    if (!this._material) {
+      return;
+    }
+    this._material.displacementMap = this._obtainAsset(
+      this.#displacementMap
+    ) as Texture;
+    this._material.needsUpdate = true;
+    this._rendererContext?.rerender();
+  }
+  get displacementMap() {
+    return this.#displacementMap;
+  }
+
+  #displacementScale?: number;
+  @property({ type: Number, reflect: true, attribute: "displacement-scale" })
+  set displacementScale(value: number | undefined) {
+    this.#displacementScale = value ?? 1;
+    if (!this._material) {
+      return;
+    }
+    this._material.displacementScale = this.#displacementScale;
+    this._material.needsUpdate = true;
+    this._rendererContext?.rerender();
+  }
+  get displacementScale() {
+    return this.#displacementScale ?? 1;
+  }
+
   @consume({ context: meshContext })
   _meshContext?: MeshContext;
 
@@ -222,6 +269,9 @@ export class ThreeMeshPhongMaterial extends ThreeMaterialBase<MeshPhongMaterial>
       emissiveMap: this._obtainAsset(this.emissiveMap) as Texture,
       specular: this.specular,
       specularMap: this._obtainAsset(this.specularMap) as Texture,
+      displacementBias: this.displacementBias,
+      displacementScale: this.displacementScale,
+      displacementMap: this._obtainAsset(this.displacementMap) as Texture,
     });
     this._rendererContext?.watchAssetChange((id) =>
       this.#handleAssetsChange(id)
@@ -249,6 +299,11 @@ export class ThreeMeshPhongMaterial extends ThreeMaterialBase<MeshPhongMaterial>
       case this.#specularMap:
         this._material.specularMap = this._obtainAsset(
           this.#specularMap
+        ) as Texture;
+      // @ts-expect-error
+      case this.#displacementMap:
+        this._material.displacementMap = this._obtainAsset(
+          this.#displacementMap
         ) as Texture;
       case this.normalMap:
         this._material.normalMap = this._obtainAsset(this.normalMap) as Texture;
