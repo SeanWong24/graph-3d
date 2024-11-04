@@ -84,10 +84,6 @@ export class ThreeRenderer extends LitElement {
     this.#resizeObserver?.disconnect();
   }
 
-  protected firstUpdated(_changedProperties: PropertyValues) {
-    // this.shadowRoot?.append(this.#renderer?.domElement);
-  }
-
   protected willUpdate(changedProperties: PropertyValues): void {
     if (
       changedProperties.has("width") ||

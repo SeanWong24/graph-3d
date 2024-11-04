@@ -6,31 +6,22 @@ import { ThreeMaterialBase } from "../utils/base/material";
 
 @customElement("three-mesh-basic-material")
 export class ThreeMeshBasicMaterial extends ThreeMaterialBase<MeshBasicMaterial> {
+  protected override _material = new MeshBasicMaterial();
+
   #color?: ColorRepresentation;
-  @property()
-  set color(value: ColorRepresentation | undefined) {
-    this.#color = value;
-    if (!this._material) {
-      return;
-    }
+  @property({ reflect: true })
+  set color(value: ColorRepresentation) {
     this._material.color = new Color(value ?? "");
-    this._material.needsUpdate = true;
-    this._rendererContext?.rerender();
   }
   get color() {
-    return this.#color;
+    return this.#color ?? `#${this._material.color.getHexString()}`;
   }
 
   #map?: string;
   @property({ reflect: true })
   set map(value: string | undefined) {
     this.#map = value;
-    if (!this._material) {
-      return;
-    }
     this._material.map = this._obtainAsset(this.#map) as Texture;
-    this._material.needsUpdate = true;
-    this._rendererContext?.rerender();
   }
   get map() {
     return this.#map;
@@ -40,12 +31,11 @@ export class ThreeMeshBasicMaterial extends ThreeMaterialBase<MeshBasicMaterial>
   _meshContext?: MeshContext;
 
   protected override initializeMaterial() {
-    this._material = new MeshBasicMaterial({
-      color: this.color,
-      opacity: this.opacity,
-      transparent: this.transparent,
-      map: this._obtainAsset(this.map) as Texture,
-    });
+    super.initializeMaterial();
+    this._material.color = new Color(this.color ?? "");
+    this._material.opacity = this.opacity;
+    this._material.map = this._obtainAsset(this.map) as Texture;
+    this._material.needsUpdate = true;
     this._rendererContext?.watchAssetChange((id) =>
       this.#handleAssetsChange(id)
     );

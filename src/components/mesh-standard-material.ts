@@ -13,31 +13,22 @@ import { vector2Converter } from "../utils/converter/vector2";
 
 @customElement("three-mesh-standard-material")
 export class ThreeMeshStandardMaterial extends ThreeMaterialBase<MeshStandardMaterial> {
+  protected override _material = new MeshStandardMaterial();
+
   #color?: ColorRepresentation;
-  @property()
-  set color(value: ColorRepresentation | undefined) {
-    this.#color = value;
-    if (!this._material) {
-      return;
-    }
+  @property({ reflect: true })
+  set color(value: ColorRepresentation) {
     this._material.color = new Color(value ?? "");
-    this._material.needsUpdate = true;
-    this._rendererContext?.rerender();
   }
   get color() {
-    return this.#color;
+    return this.#color ?? `#${this._material.color.getHexString()}`;
   }
 
   #map?: string;
   @property({ reflect: true })
   set map(value: string | undefined) {
     this.#map = value;
-    if (!this._material) {
-      return;
-    }
     this._material.map = this._obtainAsset(this.#map) as Texture;
-    this._material.needsUpdate = true;
-    this._rendererContext?.rerender();
   }
   get map() {
     return this.#map;
@@ -47,129 +38,119 @@ export class ThreeMeshStandardMaterial extends ThreeMaterialBase<MeshStandardMat
   @property({ reflect: true, attribute: "bump-map" })
   set bumpMap(value: string | undefined) {
     this.#bumpMap = value;
-    if (!this._material) {
-      return;
-    }
     this._material.map = this._obtainAsset(this.#bumpMap) as Texture;
-    this._material.needsUpdate = true;
-    this._rendererContext?.rerender();
   }
   get bumpMap() {
     return this.#bumpMap;
   }
 
-  #bumpScale?: number;
   @property({ type: Number, reflect: true, attribute: "bump-scale" })
-  set bumpScale(value: number | undefined) {
-    this.#bumpScale = value ?? 1;
-    if (!this._material) {
-      return;
-    }
-    this._material.bumpScale = this.#bumpScale;
-    this._material.needsUpdate = true;
-    this._rendererContext?.rerender();
+  set bumpScale(value: number) {
+    this._material.bumpScale = value;
   }
   get bumpScale() {
-    return this.#bumpScale ?? 1;
+    return this._material.bumpScale;
   }
 
   #normalMap?: string;
   @property({ reflect: true, attribute: "normal-map" })
   set normalMap(value: string | undefined) {
     this.#normalMap = value;
-    if (!this._material) {
-      return;
-    }
     this._material.map = this._obtainAsset(this.#normalMap) as Texture;
-    this._material.needsUpdate = true;
-    this._rendererContext?.rerender();
   }
   get normalMap() {
     return this.#normalMap;
   }
 
-  #normalScale?: Vector2;
   @property({
     type: Vector2,
     reflect: true,
     attribute: "normal-scale",
     converter: vector2Converter,
   })
-  set normalScale(value: Vector2 | undefined) {
-    this.#normalScale = value ?? new Vector2(1, 1);
-    if (!this._material) {
-      return;
-    }
-    this._material.normalScale = this.#normalScale;
+  set normalScale(value: Vector2) {
+    this._material.normalScale = value;
   }
   get normalScale() {
-    return this.#normalScale ?? new Vector2(1, 1);
+    return this._material.normalScale;
   }
 
-  #displacementBias?: number;
+  @property({ type: Number, attribute: "emissive-intensity" })
+  set emissiveIntensity(value: number) {
+    this._material.emissiveIntensity = value;
+  }
+  get emissiveIntensity() {
+    return this._material.emissiveIntensity;
+  }
+
+  #emissive?: ColorRepresentation;
+  @property()
+  set emissive(value: ColorRepresentation) {
+    this._material.emissive = new Color(value ?? "");
+  }
+  get emissive() {
+    return this.#emissive ?? `#${this._material.emissive.getHexString()}`;
+  }
+
+  #emissiveMap?: string;
+  @property({ reflect: true, attribute: "emissive-map" })
+  set emissiveMap(value: string | undefined) {
+    this.#emissiveMap = value;
+    this._material.emissiveMap = this._obtainAsset(
+      this.#emissiveMap
+    ) as Texture;
+  }
+  get emissiveMap() {
+    return this.#emissiveMap;
+  }
+
   @property({ type: Number, attribute: "displacement-bias" })
-  set displacementBias(value: number | undefined) {
-    this.#displacementBias = value;
-    if (!this._material) {
-      return;
-    }
-    this._material.displacementBias = value ?? 1;
-    this._material.needsUpdate = true;
-    this._rendererContext?.rerender();
+  set displacementBias(value: number) {
+    this._material.displacementBias = value;
   }
   get displacementBias() {
-    return this.#displacementBias;
+    return this._material.displacementBias;
   }
 
   #displacementMap?: string;
   @property({ reflect: true, attribute: "displacement-map" })
   set displacementMap(value: string | undefined) {
     this.#displacementMap = value;
-    if (!this._material) {
-      return;
-    }
     this._material.displacementMap = this._obtainAsset(
       this.#displacementMap
     ) as Texture;
-    this._material.needsUpdate = true;
-    this._rendererContext?.rerender();
   }
   get displacementMap() {
     return this.#displacementMap;
   }
 
-  #displacementScale?: number;
   @property({ type: Number, reflect: true, attribute: "displacement-scale" })
-  set displacementScale(value: number | undefined) {
-    this.#displacementScale = value ?? 1;
-    if (!this._material) {
-      return;
-    }
-    this._material.displacementScale = this.#displacementScale;
-    this._material.needsUpdate = true;
-    this._rendererContext?.rerender();
+  set displacementScale(value: number) {
+    this._material.displacementScale = value;
   }
   get displacementScale() {
-    return this.#displacementScale ?? 1;
+    return this._material.displacementScale;
   }
 
   @consume({ context: meshContext })
   _meshContext?: MeshContext;
 
   protected override initializeMaterial() {
-    this._material = new MeshStandardMaterial({
-      color: this.color,
-      opacity: this.opacity,
-      transparent: this.transparent,
-      map: this._obtainAsset(this.map) as Texture,
-      bumpMap: this._obtainAsset(this.bumpMap) as Texture,
-      bumpScale: this.bumpScale,
-      normalMap: this._obtainAsset(this.normalMap) as Texture,
-      normalScale: this.normalScale,
-      displacementBias: this.displacementBias,
-      displacementScale: this.displacementScale,
-      displacementMap: this._obtainAsset(this.displacementMap) as Texture,
-    });
+    super.initializeMaterial();
+    this._material.map = this._obtainAsset(this.map) as Texture;
+    this._material.bumpMap = this._obtainAsset(this.bumpMap) as Texture;
+    this._material.bumpScale = this.bumpScale;
+    this._material.normalMap = this._obtainAsset(this.normalMap) as Texture;
+    this._material.normalScale = this.normalScale;
+    this._material.emissiveIntensity = this.emissiveIntensity;
+    this._material.emissive = new Color(this.emissive);
+    this._material.emissiveMap = this._obtainAsset(this.emissiveMap) as Texture;
+    this._material.displacementBias = this.displacementBias;
+    this._material.displacementScale = this.displacementScale;
+    this._material.displacementMap = this._obtainAsset(
+      this.displacementMap
+    ) as Texture;
+    this._material.needsUpdate = true;
     this._rendererContext?.watchAssetChange((id) =>
       this.#handleAssetsChange(id)
     );

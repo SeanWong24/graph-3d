@@ -32,10 +32,6 @@
         color-space="srgb"
       ></three-texture>
       <three-texture
-        id="earth-bump-texture"
-        src="./textures/earth_bumpmap.webp"
-      ></three-texture>
-      <three-texture
         id="earth-normal-texture"
         src="./textures/2k_earth_normal_map.webp"
       ></three-texture>
@@ -60,21 +56,19 @@
         <three-point-light
           id="point-light"
           color="white"
-          intensity="100"
+          intensity="60"
           decay="1"
-          position="7 7 10"
+          position="10 10 15"
         ></three-point-light>
         <three-mesh id="earth" rotation="0.41">
           <three-sphere-geometry></three-sphere-geometry>
           <three-mesh-phong-material
             color="white"
             map="earth-day-texture"
-            shininess="100"
+            shininess="15"
             emissive="black"
-            specular="white"
+            specular="#888888"
             specular-map="earth-specular-texture"
-            bump-map="earth-bump-texture"
-            bump-scale="0.5"
             normal-map="earth-normal-texture"
             normal-scale="5 5"
           >
@@ -93,12 +87,10 @@
           <three-mesh-phong-material
             color="white"
             map="earth-night-texture"
-            shininess="50"
+            shininess="10"
             emissive="black"
-            specular="white"
+            specular="#555555"
             specular-map="earth-specular-texture"
-            bump-map="earth-bump-texture"
-            bump-scale="0.5"
             normal-map="earth-normal-texture"
             normal-scale="5 5"
           >
@@ -137,6 +129,7 @@
 
         let mesh = document.querySelector("#earth");
         const deltaDegree = -0.0025;
+        customElements.upgrade(mesh);
         if (mesh.isReady) {
           mesh.rotation.y += deltaDegree;
         }

@@ -1,48 +1,52 @@
 import { consume } from "@lit/context";
-import { css, LitElement, PropertyValues } from "lit";
+import { PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 import { Material } from "three";
 import { rendererContext, RendererContext } from "../context/renderer";
+import { ThreeWrapperBase } from "./wrapper";
 
-export abstract class ThreeMaterialBase<T extends Material> extends LitElement {
-  static styles = css``;
+export abstract class ThreeMaterialBase<
+  T extends Material
+> extends ThreeWrapperBase {
+  protected abstract get _material(): T;
 
-  protected _material?: T;
+  override get isReady() {
+    return !!this._material;
+  }
 
-  #opacity?: number;
   @property({ type: Number, reflect: true })
-  set opacity(value: number | undefined) {
-    this.#opacity = value ?? 1;
-    if (!this._material) {
-      return;
-    }
-    this._material.opacity = this.#opacity;
+  set opacity(value: number) {
+    this._material.opacity = value;
   }
   get opacity() {
-    return this.#opacity ?? 1;
+    return this._material.opacity;
   }
 
-  #transparent?: boolean;
   @property({ type: Boolean, reflect: true })
-  set transparent(value: boolean | undefined) {
-    this.#transparent = value ?? false;
-    if (!this._material) {
-      return;
-    }
-    this._material.transparent = this.#transparent;
+  set transparent(value: boolean) {
+    this._material.transparent = value;
   }
   get transparent() {
-    return this.#transparent ?? false;
+    return this._material.transparent ?? false;
   }
 
   @consume({ context: rendererContext })
   protected _rendererContext?: RendererContext;
 
-  protected abstract initializeMaterial(): void;
+  protected initializeMaterial() {
+    this._material.opacity = this.opacity;
+    this._material.transparent = this.transparent;
+  }
 
   protected firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
     this.initializeMaterial();
+  }
+
+  protected willUpdate(_changedProperties: PropertyValues): void {
+    super.willUpdate(_changedProperties);
+    this._material.needsUpdate = true;
+    this._rendererContext?.rerender();
   }
 
   render() {

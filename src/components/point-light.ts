@@ -6,35 +6,26 @@ import { ThreeLightBase } from "../utils/base/light";
 export class ThreePointLight extends ThreeLightBase<PointLight> {
   protected override _object = new PointLight();
 
-  #distance?: number;
   @property({ type: Number })
-  set distance(value: number | undefined) {
-    this.#distance = value;
-    if (!this._object) {
-      return;
-    }
-    this._object.distance = value ?? 0;
+  set distance(value: number) {
+    this._object.distance = value;
   }
   get distance() {
-    return this.#distance;
+    return this._object.distance;
   }
 
-  #decay?: number;
   @property({ type: Number })
-  set decay(value: number | undefined) {
-    this.#decay = value;
-    if (!this._object) {
-      return;
-    }
-    this._object.decay = value ?? 2;
+  set decay(value: number) {
+    this._object.decay = value;
   }
   get decay() {
-    return this.#decay;
+    return this._object.decay;
   }
 
   protected override _initializeLight() {
     super._initializeLight();
-    this._object = new PointLight(this.distance, this.decay);
+    this._object.distance = this.distance;
+    this._object.decay = this.decay;
   }
 }
 

@@ -3,40 +3,37 @@ import { property } from "lit/decorators.js";
 import { ColorRepresentation, Color, Light } from "three";
 import { object3DContext, Object3DContext } from "../context/object-3d";
 import { ThreeObject3DBase } from "./object-3d";
+import { rendererContext, RendererContext } from "../context/renderer";
+import { PropertyValues } from "lit";
 
 export abstract class ThreeLightBase<
   T extends Light
 > extends ThreeObject3DBase<T> {
-  #color: ColorRepresentation = "";
-  @property()
+  #color?: ColorRepresentation;
+  @property({ reflect: true })
   set color(value: ColorRepresentation) {
-    this.#color = value;
-    this._object.color = new Color(value);
+    this._object.color = new Color(value ?? "");
   }
   get color() {
-    return this.#color;
+    return this.#color ?? `#${this._object.color.getHexString()}`;
   }
 
-  #intensity: number = 1;
   @property({ type: Number })
   set intensity(value: number) {
-    this.#intensity = value;
-    if (!this._object) {
-      return;
-    }
     this._object.intensity = value;
   }
   get intensity() {
-    return this.#intensity;
+    return this._object.intensity;
   }
+
+  @consume({ context: rendererContext })
+  protected _rendererContext?: RendererContext;
 
   @consume({ context: object3DContext })
   protected _sceneContext?: Object3DContext;
 
   connectedCallback() {
     super.connectedCallback();
-    this._object.color = new Color(this.color);
-    this._object.intensity = this.intensity;
     this._initializeLight();
     this._sceneContext?.addObject(this._object);
   }
@@ -46,7 +43,15 @@ export abstract class ThreeLightBase<
     this._sceneContext?.removeObject(this._object);
   }
 
-  protected _initializeLight() {}
+  protected willUpdate(_changedProperties: PropertyValues): void {
+    super.willUpdate(_changedProperties);
+    this._rendererContext?.rerender();
+  }
+
+  protected _initializeLight() {
+    this._object.color = new Color(this.color);
+    this._object.intensity = this.intensity;
+  }
 
   render() {
     return null;
