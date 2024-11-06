@@ -2,10 +2,10 @@ import { consume } from "@lit/context";
 import { customElement, property } from "lit/decorators.js";
 import { Color, ColorRepresentation, MeshBasicMaterial, Texture } from "three";
 import { meshContext, MeshContext } from "../utils/context/mesh";
-import { ThreeMaterialBase } from "../utils/base/material";
+import { G3DMaterialBase } from "../utils/base/material";
 
-@customElement("three-mesh-basic-material")
-export class ThreeMeshBasicMaterial extends ThreeMaterialBase<MeshBasicMaterial> {
+@customElement("g3d-mesh-basic-material")
+export class G3DMeshBasicMaterial extends G3DMaterialBase<MeshBasicMaterial> {
   protected override _material = new MeshBasicMaterial();
 
   #color?: ColorRepresentation;
@@ -59,6 +59,6 @@ export class ThreeMeshBasicMaterial extends ThreeMaterialBase<MeshBasicMaterial>
 
 declare global {
   interface HTMLElementTagNameMap {
-    "three-mesh-basic-material": ThreeMeshBasicMaterial;
+    "g3d-mesh-basic-material": G3DMeshBasicMaterial;
   }
 }

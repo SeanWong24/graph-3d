@@ -4,8 +4,8 @@ import { customElement, property } from "lit/decorators.js";
 import { ColorSpace, Texture, TextureLoader } from "three";
 import { RendererContext, rendererContext } from "../utils/context/renderer";
 
-@customElement("three-texture")
-export class ThreeTexture extends LitElement {
+@customElement("g3d-texture")
+export class G3DTexture extends LitElement {
   #texture?: Texture;
 
   @property({ reflect: true })
@@ -42,6 +42,6 @@ export class ThreeTexture extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "three-texture": ThreeTexture;
+    "g3d-texture": G3DTexture;
   }
 }

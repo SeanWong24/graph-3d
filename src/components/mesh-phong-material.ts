@@ -8,11 +8,11 @@ import {
   Vector2,
 } from "three";
 import { meshContext, MeshContext } from "../utils/context/mesh";
-import { ThreeMaterialBase } from "../utils/base/material";
+import { G3DMaterialBase } from "../utils/base/material";
 import { vector2Converter } from "../utils/converter/vector2";
 
-@customElement("three-mesh-phong-material")
-export class ThreeMeshPhongMaterial extends ThreeMaterialBase<MeshPhongMaterial> {
+@customElement("g3d-mesh-phong-material")
+export class G3DMeshPhongMaterial extends G3DMaterialBase<MeshPhongMaterial> {
   protected override _material = new MeshPhongMaterial();
 
   #color?: ColorRepresentation;
@@ -226,6 +226,6 @@ export class ThreeMeshPhongMaterial extends ThreeMaterialBase<MeshPhongMaterial>
 
 declare global {
   interface HTMLElementTagNameMap {
-    "three-mesh-phong-material": ThreeMeshPhongMaterial;
+    "g3d-mesh-phong-material": G3DMeshPhongMaterial;
   }
 }

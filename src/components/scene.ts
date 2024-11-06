@@ -3,8 +3,8 @@ import { customElement, property } from "lit/decorators.js";
 import { Scene, Color } from "three";
 import { ThreeObject3DBase } from "../utils/base/object-3d";
 
-@customElement("three-scene")
-export class ThreeScene extends ThreeObject3DBase<Scene> {
+@customElement("g3d-scene")
+export class G3DScene extends ThreeObject3DBase<Scene> {
   protected override _object = new Scene();
 
   #background?: string;
@@ -48,6 +48,6 @@ export class ThreeScene extends ThreeObject3DBase<Scene> {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "three-scene": ThreeScene;
+    "g3d-scene": G3DScene;
   }
 }

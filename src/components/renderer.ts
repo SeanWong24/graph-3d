@@ -4,8 +4,8 @@ import { customElement, property } from "lit/decorators.js";
 import { Renderer, WebGLRenderer, Camera, Scene } from "three";
 import { RendererContext, rendererContext } from "../utils/context/renderer";
 
-@customElement("three-renderer")
-export class ThreeRenderer extends LitElement {
+@customElement("g3d-renderer")
+export class G3DRenderer extends LitElement {
   static styles = css`
     :host {
       display: block;
@@ -122,6 +122,6 @@ export class ThreeRenderer extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "three-renderer": ThreeRenderer;
+    "g3d-renderer": G3DRenderer;
   }
 }

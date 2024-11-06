@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Three WC</title>
+    <title>Graph 3D</title>
     <link rel="stylesheet" href="./src/index.css" />
     <script type="module" src="/src/index.ts"></script>
     <style>
@@ -15,54 +15,51 @@
     </style>
   </head>
   <body>
-    <three-renderer id="renderer">
-      <three-texture
+    <g3d-renderer id="renderer">
+      <g3d-texture
         id="background-texture"
         src="./textures/2k_stars_milky_way.webp"
         color-space="srgb"
-      ></three-texture>
-      <three-texture
+      ></g3d-texture>
+      <g3d-texture
         id="earth-night-texture"
         src="./textures/2k_earth_nightmap.webp"
         color-space="srgb"
-      ></three-texture>
-      <three-texture
+      ></g3d-texture>
+      <g3d-texture
         id="earth-day-texture"
         src="./textures/2k_earth_daymap.webp"
         color-space="srgb"
-      ></three-texture>
-      <three-texture
+      ></g3d-texture>
+      <g3d-texture
         id="earth-normal-texture"
         src="./textures/2k_earth_normal_map.webp"
-      ></three-texture>
-      <three-texture
+      ></g3d-texture>
+      <g3d-texture
         id="earth-specular-texture"
         src="./textures/2k_earth_specular_map.webp"
-      ></three-texture>
-      <three-texture
+      ></g3d-texture>
+      <g3d-texture
         id="earth-clouds-texture"
         src="./textures/2k_earth_clouds.webp"
         color-space="srgb"
-      ></three-texture>
-      <three-perspective-camera
+      ></g3d-texture>
+      <g3d-perspective-camera
         id="camera"
         position="0 0 5"
-      ></three-perspective-camera>
-      <three-scene background="background-texture">
-        <three-ambient-light
-          color="white"
-          intensity="0.2"
-        ></three-ambient-light>
-        <three-point-light
+      ></g3d-perspective-camera>
+      <g3d-scene background="background-texture">
+        <g3d-ambient-light color="white" intensity="0.2"></g3d-ambient-light>
+        <g3d-point-light
           id="point-light"
           color="white"
           intensity="60"
           decay="1"
           position="10 10 15"
-        ></three-point-light>
-        <three-mesh id="earth" rotation="0.41">
-          <three-sphere-geometry></three-sphere-geometry>
-          <three-mesh-phong-material
+        ></g3d-point-light>
+        <g3d-mesh id="earth" rotation="0.41">
+          <g3d-sphere-geometry></g3d-sphere-geometry>
+          <g3d-mesh-phong-material
             color="white"
             map="earth-day-texture"
             shininess="15"
@@ -72,18 +69,18 @@
             normal-map="earth-normal-texture"
             normal-scale="5 5"
           >
-          </three-mesh-phong-material>
-          <three-mesh id="clouds">
-            <three-sphere-geometry radius="1.02"></three-sphere-geometry>
-            <three-mesh-standard-material
+          </g3d-mesh-phong-material>
+          <g3d-mesh id="clouds">
+            <g3d-sphere-geometry radius="1.02"></g3d-sphere-geometry>
+            <g3d-mesh-standard-material
               map="earth-clouds-texture"
               transparent
               opacity="0.5"
-            ></three-mesh-standard-material>
-          </three-mesh>
-          <three-mesh>
-            <three-sphere-geometry radius="1.03"></three-sphere-geometry>
-            <three-shader-material transparent>
+            ></g3d-mesh-standard-material>
+          </g3d-mesh>
+          <g3d-mesh>
+            <g3d-sphere-geometry radius="1.03"></g3d-sphere-geometry>
+            <g3d-shader-material transparent>
               <script type="uniforms">
                 {
                   "coeficient": { "value": 1 },
@@ -123,12 +120,12 @@
                   gl_FragColor = vec4(glowColor, intensity * 0.3  );
                 }
               </script>
-            </three-shader-material>
-          </three-mesh>
-        </three-mesh>
-        <three-mesh id="dark-earth" position="3 0 -3" rotation="0.41">
-          <three-sphere-geometry></three-sphere-geometry>
-          <three-mesh-phong-material
+            </g3d-shader-material>
+          </g3d-mesh>
+        </g3d-mesh>
+        <g3d-mesh id="dark-earth" position="3 0 -3" rotation="0.41">
+          <g3d-sphere-geometry></g3d-sphere-geometry>
+          <g3d-mesh-phong-material
             color="white"
             map="earth-night-texture"
             shininess="10"
@@ -138,18 +135,18 @@
             normal-map="earth-normal-texture"
             normal-scale="5 5"
           >
-          </three-mesh-phong-material>
-          <three-mesh id="dark-earth-clouds">
-            <three-sphere-geometry radius="1.02"></three-sphere-geometry>
-            <three-mesh-standard-material
+          </g3d-mesh-phong-material>
+          <g3d-mesh id="dark-earth-clouds">
+            <g3d-sphere-geometry radius="1.02"></g3d-sphere-geometry>
+            <g3d-mesh-standard-material
               map="earth-clouds-texture"
               transparent
               opacity="0.3"
-            ></three-mesh-standard-material>
-          </three-mesh>
-        </three-mesh>
-      </three-scene>
-    </three-renderer>
+            ></g3d-mesh-standard-material>
+          </g3d-mesh>
+        </g3d-mesh>
+      </g3d-scene>
+    </g3d-renderer>
 
     <script>
       const renderer = document.querySelector("#renderer");

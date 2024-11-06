@@ -6,11 +6,11 @@ import { rendererContext, RendererContext } from "../context/renderer";
 import { vector3Converter } from "../converter/vector3";
 import { object3DContext, Object3DContext } from "../context/object-3d";
 import { eulerConverter } from "../converter/euler";
-import { ThreeWrapperBase } from "./wrapper";
+import { G3DWrapperBase as G3DWrapperBase } from "./wrapper";
 
 export abstract class ThreeObject3DBase<
   T extends Object3D
-> extends ThreeWrapperBase {
+> extends G3DWrapperBase {
   protected abstract get _object(): T;
 
   override get isReady() {

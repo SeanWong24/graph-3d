@@ -1,9 +1,9 @@
 import { customElement, property } from "lit/decorators.js";
 import { PointLight } from "three";
-import { ThreeLightBase } from "../utils/base/light";
+import { G3DLightBase } from "../utils/base/light";
 
-@customElement("three-point-light")
-export class ThreePointLight extends ThreeLightBase<PointLight> {
+@customElement("g3d-point-light")
+export class G3DPointLight extends G3DLightBase<PointLight> {
   protected override _object = new PointLight();
 
   @property({ type: Number })
@@ -31,6 +31,6 @@ export class ThreePointLight extends ThreeLightBase<PointLight> {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "three-point-light": ThreePointLight;
+    "g3d-point-light": G3DPointLight;
   }
 }

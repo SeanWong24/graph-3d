@@ -3,8 +3,8 @@ import { customElement, property } from "lit/decorators.js";
 import { PerspectiveCamera } from "three";
 import { ThreeObject3DBase } from "../utils/base/object-3d";
 
-@customElement("three-perspective-camera")
-export class ThreePerspectiveCamera extends ThreeObject3DBase<PerspectiveCamera> {
+@customElement("g3d-perspective-camera")
+export class G3DPerspectiveCamera extends ThreeObject3DBase<PerspectiveCamera> {
   protected override _object = new PerspectiveCamera();
 
   @property({ type: Number, reflect: true })
@@ -55,6 +55,6 @@ export class ThreePerspectiveCamera extends ThreeObject3DBase<PerspectiveCamera>
 
 declare global {
   interface HTMLElementTagNameMap {
-    "three-perspective-camera": ThreePerspectiveCamera;
+    "g3d-perspective-camera": G3DPerspectiveCamera;
   }
 }

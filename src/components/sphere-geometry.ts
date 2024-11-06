@@ -4,8 +4,8 @@ import { customElement, property } from "lit/decorators.js";
 import { SphereGeometry } from "three";
 import { meshContext, MeshContext } from "../utils/context/mesh";
 
-@customElement("three-sphere-geometry")
-export class ThreeSphereGeometry extends LitElement {
+@customElement("g3d-sphere-geometry")
+export class G3DSphereGeometry extends LitElement {
   #geometry?: SphereGeometry;
 
   @property({ type: Number, reflect: true })
@@ -36,6 +36,6 @@ export class ThreeSphereGeometry extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "three-sphere-geometry": ThreeSphereGeometry;
+    "g3d-sphere-geometry": G3DSphereGeometry;
   }
 }

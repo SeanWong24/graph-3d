@@ -2,10 +2,10 @@ import { consume } from "@lit/context";
 import { customElement, property } from "lit/decorators.js";
 import { IUniform, ShaderMaterial } from "three";
 import { meshContext, MeshContext } from "../utils/context/mesh";
-import { ThreeMaterialBase } from "../utils/base/material";
+import { G3DMaterialBase } from "../utils/base/material";
 
-@customElement("three-shader-material")
-export class ThreeShaderMaterial extends ThreeMaterialBase<ShaderMaterial> {
+@customElement("g3d-shader-material")
+export class G3DShaderMaterial extends G3DMaterialBase<ShaderMaterial> {
   #mutationObserver?: MutationObserver;
 
   protected override _material = new ShaderMaterial();
@@ -172,6 +172,6 @@ export class ThreeShaderMaterial extends ThreeMaterialBase<ShaderMaterial> {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "three-shader-material": ThreeShaderMaterial;
+    "g3d-shader-material": G3DShaderMaterial;
   }
 }

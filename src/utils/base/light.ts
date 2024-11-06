@@ -6,7 +6,7 @@ import { ThreeObject3DBase } from "./object-3d";
 import { rendererContext, RendererContext } from "../context/renderer";
 import { PropertyValues } from "lit";
 
-export abstract class ThreeLightBase<
+export abstract class G3DLightBase<
   T extends Light
 > extends ThreeObject3DBase<T> {
   #color?: ColorRepresentation;

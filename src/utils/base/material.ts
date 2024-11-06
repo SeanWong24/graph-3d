@@ -3,11 +3,11 @@ import { PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 import { Material } from "three";
 import { rendererContext, RendererContext } from "../context/renderer";
-import { ThreeWrapperBase } from "./wrapper";
+import { G3DWrapperBase } from "./wrapper";
 
-export abstract class ThreeMaterialBase<
+export abstract class G3DMaterialBase<
   T extends Material
-> extends ThreeWrapperBase {
+> extends G3DWrapperBase {
   protected abstract get _material(): T;
 
   override get isReady() {

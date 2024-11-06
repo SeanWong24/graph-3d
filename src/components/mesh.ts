@@ -4,8 +4,8 @@ import { BufferGeometry, Material, Mesh } from "three";
 import { meshContext, MeshContext } from "../utils/context/mesh";
 import { ThreeObject3DBase } from "../utils/base/object-3d";
 
-@customElement("three-mesh")
-export class ThreeMesh extends ThreeObject3DBase<Mesh> {
+@customElement("g3d-mesh")
+export class G3DMesh extends ThreeObject3DBase<Mesh> {
   protected override _object = new Mesh();
 
   @provide({ context: meshContext })
@@ -33,6 +33,6 @@ export class ThreeMesh extends ThreeObject3DBase<Mesh> {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "three-mesh": ThreeMesh;
+    "g3d-mesh": G3DMesh;
   }
 }

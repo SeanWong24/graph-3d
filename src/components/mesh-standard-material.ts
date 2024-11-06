@@ -8,11 +8,11 @@ import {
   Vector2,
 } from "three";
 import { meshContext, MeshContext } from "../utils/context/mesh";
-import { ThreeMaterialBase } from "../utils/base/material";
+import { G3DMaterialBase } from "../utils/base/material";
 import { vector2Converter } from "../utils/converter/vector2";
 
-@customElement("three-mesh-standard-material")
-export class ThreeMeshStandardMaterial extends ThreeMaterialBase<MeshStandardMaterial> {
+@customElement("g3d-mesh-standard-material")
+export class G3DMeshStandardMaterial extends G3DMaterialBase<MeshStandardMaterial> {
   protected override _material = new MeshStandardMaterial();
 
   #color?: ColorRepresentation;
@@ -184,6 +184,6 @@ export class ThreeMeshStandardMaterial extends ThreeMaterialBase<MeshStandardMat
 
 declare global {
   interface HTMLElementTagNameMap {
-    "three-mesh-standard-material": ThreeMeshStandardMaterial;
+    "g3d-mesh-standard-material": G3DMeshStandardMaterial;
   }
 }

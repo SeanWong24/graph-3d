@@ -1,14 +1,14 @@
 import { customElement } from "lit/decorators.js";
 import { AmbientLight } from "three";
-import { ThreeLightBase } from "../utils/base/light";
+import { G3DLightBase } from "../utils/base/light";
 
-@customElement("three-ambient-light")
-export class ThreeAmbientLight extends ThreeLightBase<AmbientLight> {
+@customElement("g3d-ambient-light")
+export class G3DAmbientLight extends G3DLightBase<AmbientLight> {
   protected override _object = new AmbientLight();
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "three-ambient-light": ThreeAmbientLight;
+    "g3d-ambient-light": G3DAmbientLight;
   }
 }
