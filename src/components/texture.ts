@@ -8,6 +8,17 @@ import { RendererContext, rendererContext } from "../utils/context/renderer";
 export class G3DTexture extends LitElement {
   #texture?: Texture;
 
+  #id?: string;
+  @property({ reflect: true })
+  set id(value: string) {
+    this._rendererContext?.removeAsset(this.id);
+    this.#id = value;
+    this._rendererContext?.addAsset(this.id, this.#texture);
+  }
+  get id() {
+    return this.#id ?? "";
+  }
+
   @property({ reflect: true })
   src?: string;
 
@@ -25,8 +36,6 @@ export class G3DTexture extends LitElement {
       this._rendererContext?.addAsset(this.id, this.#texture);
     }
   }
-
-  // TODO handle id change
 
   disconnectedCallback() {
     super.disconnectedCallback();
