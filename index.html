@@ -78,8 +78,52 @@
             <three-mesh-standard-material
               map="earth-clouds-texture"
               transparent
-              opacity="0.2"
+              opacity="0.5"
             ></three-mesh-standard-material>
+          </three-mesh>
+          <three-mesh>
+            <three-sphere-geometry radius="1.03"></three-sphere-geometry>
+            <three-shader-material transparent>
+              <script type="uniforms">
+                {
+                  "coeficient": { "value": 1 },
+                  "power": { "value": 3 },
+                  "glowColor": { "value": [0.15, 0.21, 1] }
+                }
+              </script>
+              <script type="vertex">
+                varying vec3 vVertexWorldPosition;
+                varying vec3 vVertexNormal;
+
+                void main() {
+
+                  vVertexNormal = normalize(normalMatrix * normal);
+
+                  vVertexWorldPosition = (modelMatrix * vec4(position, 1.0)).xyz;
+
+                  // set gl_Position
+                  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+              </script>
+              <script type="fragment">
+                uniform vec3 glowColor;
+                uniform float coeficient;
+                uniform float power;
+
+                varying vec3 vVertexNormal;
+                varying vec3 vVertexWorldPosition;
+
+                void main() {
+                  vec3 worldCameraToVertex = vVertexWorldPosition - cameraPosition;
+                  vec3 viewCameraToVertex = (viewMatrix * vec4(worldCameraToVertex, 0.0)).xyz;
+                  viewCameraToVertex = normalize(viewCameraToVertex);
+                  float intensity =
+                      pow(coeficient + dot(vVertexNormal, viewCameraToVertex), power);
+
+                  gl_FragColor = vec4(glowColor, intensity * 0.3  );
+                }
+              </script>
+            </three-shader-material>
           </three-mesh>
         </three-mesh>
         <three-mesh id="dark-earth" position="3 0 -3" rotation="0.41">
@@ -100,7 +144,7 @@
             <three-mesh-standard-material
               map="earth-clouds-texture"
               transparent
-              opacity="0.1"
+              opacity="0.3"
             ></three-mesh-standard-material>
           </three-mesh>
         </three-mesh>

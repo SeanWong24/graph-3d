@@ -6,6 +6,8 @@ import { ThreeMaterialBase } from "../utils/base/material";
 
 @customElement("three-shader-material")
 export class ThreeShaderMaterial extends ThreeMaterialBase<ShaderMaterial> {
+  #mutationObserver?: MutationObserver;
+
   protected override _material = new ShaderMaterial();
 
   @property({ reflect: true, attribute: "vertex-shader" })
@@ -66,6 +68,89 @@ export class ThreeShaderMaterial extends ThreeMaterialBase<ShaderMaterial> {
     this._material.uniformsNeedUpdate = true;
     this._material.needsUpdate = true;
     this._meshContext?.updateMaterial(this._material);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    // TODO make these reuseable
+    this.uniforms = JSON.parse(
+      this.querySelector('script[type="uniforms"]')?.textContent ?? "{}"
+    );
+    this.vertexShader =
+      this.querySelector('script[type="vertex"]')?.textContent ?? "";
+    this.fragmentShader =
+      this.querySelector('script[type="fragment"]')?.textContent ?? "";
+    this.#mutationObserver = new MutationObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.target === this && entry.addedNodes.length > 0) {
+          for (const node of entry.addedNodes) {
+            if ((node as Element).tagName === "SCRIPT") {
+              switch ((node as HTMLScriptElement).type) {
+                case "vertex":
+                  this.vertexShader =
+                    (node as HTMLScriptElement).textContent ?? "";
+                  break;
+                case "fragment":
+                  this.fragmentShader =
+                    (node as HTMLScriptElement).textContent ?? "";
+                  break;
+                case "uniforms":
+                  this.uniforms = JSON.parse(
+                    (node as HTMLScriptElement).textContent ?? ""
+                  );
+                  break;
+              }
+            } else if (
+              (entry.target.parentElement as Element).tagName === "SCRIPT"
+            ) {
+              switch ((entry.target.parentElement as HTMLScriptElement).type) {
+                case "vertex":
+                  this.vertexShader =
+                    (entry.target.parentElement as HTMLScriptElement)
+                      .textContent ?? "";
+                  break;
+                case "fragment":
+                  this.fragmentShader =
+                    (entry.target.parentElement as HTMLScriptElement)
+                      .textContent ?? "";
+                  break;
+                case "uniforms":
+                  this.uniforms = JSON.parse(
+                    (entry.target.parentElement as HTMLScriptElement)
+                      .textContent ?? ""
+                  );
+                  break;
+              }
+            }
+          }
+        }
+        if (entry.target !== this) {
+          if ((entry.target as Element).tagName === "script") {
+            switch ((entry.target as HTMLScriptElement).type) {
+              case "vertex":
+                this.vertexShader =
+                  (entry.target as HTMLScriptElement).textContent ?? "";
+                break;
+              case "fragment":
+                this.fragmentShader =
+                  (entry.target as HTMLScriptElement).textContent ?? "";
+                break;
+              case "uniforms":
+                this.uniforms = JSON.parse(
+                  (entry.target as HTMLScriptElement).textContent ?? ""
+                );
+                break;
+            }
+          }
+        }
+      }
+    });
+    this.#mutationObserver.observe(this, {
+      childList: true,
+      attributes: true,
+      subtree: true,
+      characterData: true,
+    });
   }
 
   #convertStringPropertiesToAssets(uniforms: Record<string, IUniform<any>>) {
