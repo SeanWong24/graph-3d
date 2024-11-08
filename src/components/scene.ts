@@ -10,6 +10,7 @@ export class G3DScene extends ThreeObject3DBase<Scene> {
   #background?: string;
   @property({ reflect: true })
   set background(value: string | undefined) {
+    this.requestUpdate("background", this.#background);
     this.#background = value;
     if (!this._object) {
       return;
@@ -17,7 +18,6 @@ export class G3DScene extends ThreeObject3DBase<Scene> {
     this._object.background = (this._obtainAsset(this.#background) ??
       new Color(this.#background) ??
       null) as any;
-    this._rendererContext?.rerender();
   }
   get background() {
     return this.#background;

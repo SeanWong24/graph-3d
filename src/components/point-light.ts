@@ -8,6 +8,7 @@ export class G3DPointLight extends G3DLightBase<PointLight> {
 
   @property({ type: Number })
   set distance(value: number) {
+    this.requestUpdate("distance", this._object.distance);
     this._object.distance = value;
   }
   get distance() {
@@ -16,6 +17,7 @@ export class G3DPointLight extends G3DLightBase<PointLight> {
 
   @property({ type: Number })
   set decay(value: number) {
+    this.requestUpdate("decay", this._object.decay);
     this._object.decay = value;
   }
   get decay() {

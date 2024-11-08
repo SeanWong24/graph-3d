@@ -6,6 +6,8 @@ import { G3DAssetBase } from "../utils/base/asset";
 export class G3DTexture extends G3DAssetBase<Texture> {
   #texture?: Texture;
 
+  isReady = false;
+
   protected override get _asset() {
     return this.#texture;
   }
@@ -27,16 +29,11 @@ export class G3DTexture extends G3DAssetBase<Texture> {
   @property({ reflect: true, attribute: "color-space" })
   colorSpace?: ColorSpace;
 
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    if (this.id) {
-      this._rendererContext?.removeAsset(this.id);
-    }
-  }
-
-  protected override async _initializeAsset() {
+  protected async _initializeAsset() {
+    super._initializeAsset();
     this.#texture = await new TextureLoader().loadAsync(this.src ?? "");
     this.#texture.colorSpace = this.colorSpace ?? "";
+    this.isReady = true;
   }
 }
 

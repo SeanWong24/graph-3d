@@ -1,11 +1,12 @@
 import { provide } from "@lit/context";
-import { css, LitElement, PropertyValues } from "lit";
+import { css, PropertyValues } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { Renderer, WebGLRenderer, Camera, Scene } from "three";
 import { RendererContext, rendererContext } from "../utils/context/renderer";
+import { G3DBase } from "../utils/base/base";
 
 @customElement("g3d-renderer")
-export class G3DRenderer extends LitElement {
+export class G3DRenderer extends G3DBase {
   static styles = css`
     :host {
       display: block;
@@ -20,6 +21,8 @@ export class G3DRenderer extends LitElement {
   #assetMap: Map<string, unknown> = new Map();
   #assetChangeWatchers: Set<(id: string) => void> = new Set();
   #resizeObserver?: ResizeObserver;
+
+  isReady = false;
 
   @provide({ context: rendererContext })
   context: RendererContext = {
@@ -84,7 +87,13 @@ export class G3DRenderer extends LitElement {
     this.#resizeObserver?.disconnect();
   }
 
-  protected willUpdate(changedProperties: PropertyValues): void {
+  protected firstUpdated(_changedProperties: PropertyValues) {
+    super.firstUpdated(_changedProperties);
+    this.isReady = true;
+  }
+
+  protected willUpdate(changedProperties: PropertyValues) {
+    super.willUpdate(changedProperties);
     if (
       changedProperties.has("width") ||
       changedProperties.has("height") ||

@@ -14,6 +14,7 @@ export class G3DShaderMaterial extends G3DMaterialBase<ShaderMaterial> {
   #vertexShader?: string;
   @property({ reflect: true, attribute: "vertex-shader" })
   set vertexShader(value: string) {
+    this.requestUpdate("vertexShader", {});
     this.#vertexShader = value;
     const code = this._obtainAsset(this.#vertexShader) as string | undefined;
     if (code === this._material.vertexShader) {
@@ -28,6 +29,7 @@ export class G3DShaderMaterial extends G3DMaterialBase<ShaderMaterial> {
   #fragmentShader?: string;
   @property({ reflect: true, attribute: "fragment-shader" })
   set fragmentShader(value: string) {
+    this.requestUpdate("fragmentShader", {});
     this.#fragmentShader = value;
     const code = this._obtainAsset(this.#fragmentShader) as string | undefined;
     if (code === this._material.fragmentShader) {
@@ -41,6 +43,7 @@ export class G3DShaderMaterial extends G3DMaterialBase<ShaderMaterial> {
 
   @property({ type: Boolean, reflect: true, attribute: "wireframe" })
   set wireframe(value: boolean) {
+    this.requestUpdate("wireframe", this._material.wireframe);
     this._material.wireframe = value;
   }
   get wireframe() {
@@ -49,6 +52,7 @@ export class G3DShaderMaterial extends G3DMaterialBase<ShaderMaterial> {
 
   @property({ type: Number, reflect: true, attribute: "wireframe-linewidth" })
   set wireframeLinewidth(value: number) {
+    this.requestUpdate("wireframeLinewidth", this._material.wireframeLinewidth);
     this._material.wireframeLinewidth = value;
   }
   get wireframeLinewidth() {
@@ -58,6 +62,7 @@ export class G3DShaderMaterial extends G3DMaterialBase<ShaderMaterial> {
   #uniforms?: string;
   @property({ reflect: true, attribute: "uniforms" })
   set uniforms(value: string) {
+    this.requestUpdate("uniforms", {});
     this.#uniforms = value;
     const code = this._obtainAsset(this.#uniforms) as string;
     this._material.uniforms = this.#convertStringPropertiesToAssets(

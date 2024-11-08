@@ -18,6 +18,7 @@ export class G3DMeshStandardMaterial extends G3DMaterialBase<MeshStandardMateria
   #color?: ColorRepresentation;
   @property({ reflect: true })
   set color(value: ColorRepresentation) {
+    this.requestUpdate("color", this.color);
     this._material.color = new Color(value ?? "");
   }
   get color() {
@@ -27,6 +28,7 @@ export class G3DMeshStandardMaterial extends G3DMaterialBase<MeshStandardMateria
   #map?: string;
   @property({ reflect: true })
   set map(value: string | undefined) {
+    this.requestUpdate("map", {});
     this.#map = value;
     this._material.map = this._obtainAsset(this.#map) as Texture;
   }
@@ -37,6 +39,7 @@ export class G3DMeshStandardMaterial extends G3DMaterialBase<MeshStandardMateria
   #bumpMap?: string;
   @property({ reflect: true, attribute: "bump-map" })
   set bumpMap(value: string | undefined) {
+    this.requestUpdate("bumpMap", this.#bumpMap);
     this.#bumpMap = value;
     this._material.map = this._obtainAsset(this.#bumpMap) as Texture;
   }
@@ -46,6 +49,7 @@ export class G3DMeshStandardMaterial extends G3DMaterialBase<MeshStandardMateria
 
   @property({ type: Number, reflect: true, attribute: "bump-scale" })
   set bumpScale(value: number) {
+    this.requestUpdate("bumpScale", this._material.bumpScale);
     this._material.bumpScale = value;
   }
   get bumpScale() {
@@ -55,6 +59,7 @@ export class G3DMeshStandardMaterial extends G3DMaterialBase<MeshStandardMateria
   #normalMap?: string;
   @property({ reflect: true, attribute: "normal-map" })
   set normalMap(value: string | undefined) {
+    this.requestUpdate("normalMap", {});
     this.#normalMap = value;
     this._material.map = this._obtainAsset(this.#normalMap) as Texture;
   }
@@ -69,6 +74,7 @@ export class G3DMeshStandardMaterial extends G3DMaterialBase<MeshStandardMateria
     converter: vector2Converter,
   })
   set normalScale(value: Vector2) {
+    this.requestUpdate("normalScale", this._material.normalScale);
     this._material.normalScale = value;
   }
   get normalScale() {
@@ -77,6 +83,7 @@ export class G3DMeshStandardMaterial extends G3DMaterialBase<MeshStandardMateria
 
   @property({ type: Number, attribute: "emissive-intensity" })
   set emissiveIntensity(value: number) {
+    this.requestUpdate("emissiveIntensity", this._material.emissiveIntensity);
     this._material.emissiveIntensity = value;
   }
   get emissiveIntensity() {
@@ -86,6 +93,7 @@ export class G3DMeshStandardMaterial extends G3DMaterialBase<MeshStandardMateria
   #emissive?: ColorRepresentation;
   @property()
   set emissive(value: ColorRepresentation) {
+    this.requestUpdate("emissive", this.#emissive);
     this._material.emissive = new Color(value ?? "");
   }
   get emissive() {
@@ -95,6 +103,7 @@ export class G3DMeshStandardMaterial extends G3DMaterialBase<MeshStandardMateria
   #emissiveMap?: string;
   @property({ reflect: true, attribute: "emissive-map" })
   set emissiveMap(value: string | undefined) {
+    this.requestUpdate("emissiveMap", {});
     this.#emissiveMap = value;
     this._material.emissiveMap = this._obtainAsset(
       this.#emissiveMap
@@ -106,6 +115,7 @@ export class G3DMeshStandardMaterial extends G3DMaterialBase<MeshStandardMateria
 
   @property({ type: Number, attribute: "displacement-bias" })
   set displacementBias(value: number) {
+    this.requestUpdate("displacementBias", this._material.displacementBias);
     this._material.displacementBias = value;
   }
   get displacementBias() {
@@ -115,6 +125,7 @@ export class G3DMeshStandardMaterial extends G3DMaterialBase<MeshStandardMateria
   #displacementMap?: string;
   @property({ reflect: true, attribute: "displacement-map" })
   set displacementMap(value: string | undefined) {
+    this.requestUpdate("displacementMap", {});
     this.#displacementMap = value;
     this._material.displacementMap = this._obtainAsset(
       this.#displacementMap
@@ -126,6 +137,7 @@ export class G3DMeshStandardMaterial extends G3DMaterialBase<MeshStandardMateria
 
   @property({ type: Number, reflect: true, attribute: "displacement-scale" })
   set displacementScale(value: number) {
+    this.requestUpdate("displacementScale", this._material.displacementScale);
     this._material.displacementScale = value;
   }
   get displacementScale() {

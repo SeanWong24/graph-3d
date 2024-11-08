@@ -6,11 +6,9 @@ import { rendererContext, RendererContext } from "../context/renderer";
 import { vector3Converter } from "../converter/vector3";
 import { object3DContext, Object3DContext } from "../context/object-3d";
 import { eulerConverter } from "../converter/euler";
-import { G3DWrapperBase as G3DWrapperBase } from "./wrapper";
+import { G3DBase as G3DBase } from "./base";
 
-export abstract class ThreeObject3DBase<
-  T extends Object3D
-> extends G3DWrapperBase {
+export abstract class ThreeObject3DBase<T extends Object3D> extends G3DBase {
   protected abstract get _object(): T;
 
   override get isReady() {
@@ -19,8 +17,8 @@ export abstract class ThreeObject3DBase<
 
   @property({ type: Boolean, reflect: true, attribute: "visible" })
   set visible(value: boolean) {
+    this.requestUpdate("visible", this._object.visible);
     this._object.visible = value;
-    this._rendererContext?.rerender();
   }
   get() {
     return this._object.visible;
@@ -33,8 +31,8 @@ export abstract class ThreeObject3DBase<
     converter: vector3Converter,
   })
   set position(value: Vector3) {
+    this.requestUpdate("position", {});
     this._object.position.copy(value);
-    this._rendererContext?.rerender();
   }
   get position() {
     const _rendererContext = this._rendererContext;
@@ -71,6 +69,7 @@ export abstract class ThreeObject3DBase<
     converter: eulerConverter,
   })
   set rotation(value: Euler) {
+    this.requestUpdate("rotation", {});
     this._object.rotation.copy(value);
     this._rendererContext?.rerender();
   }
@@ -96,6 +95,7 @@ export abstract class ThreeObject3DBase<
     converter: vector3Converter,
   })
   set scale(value: Vector3) {
+    this.requestUpdate("scale", {});
     this._object.scale.copy(value);
     this._rendererContext?.rerender();
   }
@@ -139,15 +139,6 @@ export abstract class ThreeObject3DBase<
     removeObject: (obj) => this.#removeObject(obj),
   };
 
-  protected firstUpdated(_changedProperties: PropertyValues) {
-    super.firstUpdated(_changedProperties);
-    this._providedObject3DContext.object = this._object;
-    this._object.position.copy(this.position);
-    this._object.rotation.copy(this.rotation);
-    this._object.scale.copy(this.scale);
-    this._rendererContext?.rerender();
-  }
-
   connectedCallback() {
     super.connectedCallback();
     this._object3DContext?.addObject(this._object);
@@ -158,8 +149,18 @@ export abstract class ThreeObject3DBase<
     this._providedObject3DContext?.removeObject(this._object);
   }
 
-  render() {
-    return null;
+  protected firstUpdated(_changedProperties: PropertyValues) {
+    super.firstUpdated(_changedProperties);
+    this._providedObject3DContext.object = this._object;
+    this._object.position.copy(this.position);
+    this._object.rotation.copy(this.rotation);
+    this._object.scale.copy(this.scale);
+    this._rendererContext?.rerender();
+  }
+
+  protected willUpdate(_changedProperties: PropertyValues) {
+    super.willUpdate(_changedProperties);
+    this._rendererContext?.rerender();
   }
 
   protected _obtainAsset(id: string = "") {

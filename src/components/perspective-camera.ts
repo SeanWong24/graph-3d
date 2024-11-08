@@ -9,6 +9,7 @@ export class G3DPerspectiveCamera extends ThreeObject3DBase<PerspectiveCamera> {
 
   @property({ type: Number, reflect: true })
   set fov(value: number) {
+    this.requestUpdate("fov", this._object.fov);
     this._object.fov = value;
   }
   get fov() {
@@ -17,6 +18,7 @@ export class G3DPerspectiveCamera extends ThreeObject3DBase<PerspectiveCamera> {
 
   @property({ type: Number, reflect: true })
   set aspect(value: number) {
+    this.requestUpdate("aspect", this._object.aspect);
     this._object.aspect = value;
   }
   get aspect() {
@@ -25,6 +27,7 @@ export class G3DPerspectiveCamera extends ThreeObject3DBase<PerspectiveCamera> {
 
   @property({ type: Number, reflect: true })
   set near(value: number) {
+    this.requestUpdate("near", this._object.near);
     this._object.near = value ?? 0.1;
   }
   get near() {
@@ -33,6 +36,7 @@ export class G3DPerspectiveCamera extends ThreeObject3DBase<PerspectiveCamera> {
 
   @property({ type: Number, reflect: true })
   set far(value: number) {
+    this.requestUpdate("far", this._object.far);
     this._object.far = value;
   }
   get far() {

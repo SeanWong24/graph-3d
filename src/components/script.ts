@@ -5,12 +5,14 @@ import { G3DAssetBase } from "../utils/base/asset";
 export class G3DScript extends G3DAssetBase<string> {
   #mutationObserver?: MutationObserver;
 
+  isReady = false;
+
   protected get _asset() {
     return this.textContent ?? "";
   }
 
-  override async connectedCallback() {
-    super.connectedCallback();
+  protected async _initializeAsset() {
+    super._initializeAsset();
     this.#mutationObserver = new MutationObserver((_) => {
       if (this.id) {
         this._rendererContext?.addAsset(this.id, this._asset);
@@ -21,11 +23,7 @@ export class G3DScript extends G3DAssetBase<string> {
       characterData: true,
       subtree: true,
     });
-    this._rendererContext?.addAsset(this.id, this._asset);
-  }
-
-  override disconnectedCallback() {
-    this._rendererContext?.removeAsset(this.id);
+    this.isReady = true;
   }
 }
 

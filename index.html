@@ -53,6 +53,15 @@
           }
         </script>
       </g3d-script>
+      <g3d-script id="dark-halo-uniforms">
+        <script type="uniforms">
+          {
+            "coeficient": { "value": 1 },
+            "power": { "value": 3 },
+            "glowColor": { "value": [0.15, 0.21, 0.5] }
+          }
+        </script>
+      </g3d-script>
       <g3d-script id="halo-vertex">
         <script type="vertex">
           varying vec3 vVertexWorldPosition;
@@ -123,7 +132,7 @@
               opacity="0.5"
             ></g3d-mesh-standard-material>
           </g3d-mesh>
-          <g3d-mesh>
+          <g3d-mesh id="halo">
             <g3d-sphere-geometry radius="1.03"></g3d-sphere-geometry>
             <g3d-shader-material
               transparent
@@ -154,6 +163,16 @@
               transparent
               opacity="0.3"
             ></g3d-mesh-standard-material>
+          </g3d-mesh>
+          <g3d-mesh id="dark-earth-halo">
+            <g3d-sphere-geometry radius="1.03"></g3d-sphere-geometry>
+            <g3d-shader-material
+              transparent
+              uniforms="dark-halo-uniforms"
+              vertex-shader="halo-vertex"
+              fragment-shader="halo-fragment"
+            >
+            </g3d-shader-material>
           </g3d-mesh>
         </g3d-mesh>
       </g3d-scene>

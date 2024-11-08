@@ -12,6 +12,7 @@ export abstract class G3DLightBase<
   #color?: ColorRepresentation;
   @property({ reflect: true })
   set color(value: ColorRepresentation) {
+    this.requestUpdate("color", this._object.color);
     this._object.color = new Color(value ?? "");
   }
   get color() {
@@ -20,6 +21,7 @@ export abstract class G3DLightBase<
 
   @property({ type: Number })
   set intensity(value: number) {
+    this.requestUpdate("intensity", this._object.intensity);
     this._object.intensity = value;
   }
   get intensity() {

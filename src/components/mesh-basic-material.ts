@@ -11,6 +11,7 @@ export class G3DMeshBasicMaterial extends G3DMaterialBase<MeshBasicMaterial> {
   #color?: ColorRepresentation;
   @property({ reflect: true })
   set color(value: ColorRepresentation) {
+    this.requestUpdate("color", this.color);
     this._material.color = new Color(value ?? "");
   }
   get color() {
@@ -20,6 +21,7 @@ export class G3DMeshBasicMaterial extends G3DMaterialBase<MeshBasicMaterial> {
   #map?: string;
   @property({ reflect: true })
   set map(value: string | undefined) {
+    this.requestUpdate("map", {});
     this.#map = value;
     this._material.map = this._obtainAsset(this.#map) as Texture;
   }

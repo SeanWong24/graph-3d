@@ -1,9 +1,9 @@
 import { consume } from "@lit/context";
-import { LitElement } from "lit";
 import { property } from "lit/decorators.js";
 import { RendererContext, rendererContext } from "../context/renderer";
+import { G3DBase } from "./base";
 
-export abstract class G3DAssetBase<T> extends LitElement {
+export abstract class G3DAssetBase<T> extends G3DBase {
   protected abstract get _asset(): T | undefined;
 
   #id?: string;
@@ -33,10 +33,6 @@ export abstract class G3DAssetBase<T> extends LitElement {
     if (this.id) {
       this._rendererContext?.removeAsset(this.id);
     }
-  }
-
-  render() {
-    return null;
   }
 
   protected async _initializeAsset() {}
