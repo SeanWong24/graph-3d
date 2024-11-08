@@ -6,24 +6,37 @@ import { G3DMaterialBase } from "../utils/base/material";
 
 @customElement("g3d-shader-material")
 export class G3DShaderMaterial extends G3DMaterialBase<ShaderMaterial> {
-  #mutationObserver?: MutationObserver;
+  readonly #DEFAULT_VERTEX_SHADER: string;
+  readonly #DEFAULT_FRAGMENT_SHADER: string;
 
   protected override _material = new ShaderMaterial();
 
+  #vertexShader?: string;
   @property({ reflect: true, attribute: "vertex-shader" })
   set vertexShader(value: string) {
-    this._material.vertexShader = value;
+    this.#vertexShader = value;
+    const code = this._obtainAsset(this.#vertexShader) as string | undefined;
+    if (code === this._material.vertexShader) {
+      return;
+    }
+    this._material.vertexShader = code ?? this.#DEFAULT_VERTEX_SHADER;
   }
   get vertexShader() {
-    return this._material.vertexShader;
+    return this.#vertexShader ?? "";
   }
 
+  #fragmentShader?: string;
   @property({ reflect: true, attribute: "fragment-shader" })
   set fragmentShader(value: string) {
-    this._material.fragmentShader = value;
+    this.#fragmentShader = value;
+    const code = this._obtainAsset(this.#fragmentShader) as string | undefined;
+    if (code === this._material.fragmentShader) {
+      return;
+    }
+    this._material.fragmentShader = code ?? this.#DEFAULT_FRAGMENT_SHADER;
   }
   get fragmentShader() {
-    return this._material.fragmentShader;
+    return this.#fragmentShader ?? "";
   }
 
   @property({ type: Boolean, reflect: true, attribute: "wireframe" })
@@ -34,24 +47,26 @@ export class G3DShaderMaterial extends G3DMaterialBase<ShaderMaterial> {
     return this._material.wireframe;
   }
 
-  @property({ type: Number, reflect: true, attribute: "wireframe-line-width" })
-  set wireframeLineWidth(value: number) {
+  @property({ type: Number, reflect: true, attribute: "wireframe-linewidth" })
+  set wireframeLinewidth(value: number) {
     this._material.wireframeLinewidth = value;
   }
-  get wireframeLineWidth() {
+  get wireframeLinewidth() {
     return this._material.wireframeLinewidth;
   }
 
-  #uniforms?: Record<string, IUniform<any>>;
-  @property({ type: Object, reflect: true, attribute: "uniforms" })
-  set uniforms(value: Record<string, IUniform<any>>) {
+  #uniforms?: string;
+  @property({ reflect: true, attribute: "uniforms" })
+  set uniforms(value: string) {
     this.#uniforms = value;
-    this._material.uniforms =
-      this.#convertStringPropertiesToAssets(this.#uniforms) ?? {};
+    const code = this._obtainAsset(this.#uniforms) as string;
+    this._material.uniforms = this.#convertStringPropertiesToAssets(
+      JSON.parse(code ?? "{}")
+    );
     this._material.uniformsNeedUpdate = true;
   }
   get uniforms() {
-    return this._material.uniforms ?? {};
+    return this.#uniforms ?? "";
   }
 
   @consume({ context: meshContext })
@@ -59,105 +74,30 @@ export class G3DShaderMaterial extends G3DMaterialBase<ShaderMaterial> {
 
   protected override initializeMaterial() {
     super.initializeMaterial();
-    this._material.vertexShader = this.vertexShader;
-    this._material.fragmentShader = this.fragmentShader;
-    this._material.wireframe = this.wireframe;
-    this._material.wireframeLinewidth = this.wireframeLineWidth;
-    this._material.uniforms =
-      this.#convertStringPropertiesToAssets(this.uniforms) ?? {};
+    this.vertexShader = this.vertexShader;
+    this.fragmentShader = this.fragmentShader;
+    this.uniforms = this.uniforms;
+    this.wireframe = this.wireframe;
+    this.wireframeLinewidth = this.wireframeLinewidth;
     this._material.uniformsNeedUpdate = true;
     this._material.needsUpdate = true;
+    this._rendererContext?.watchAssetChange((id) =>
+      this.#handleAssetsChange(id)
+    );
     this._meshContext?.updateMaterial(this._material);
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    // TODO make these reuseable
-    this.uniforms = JSON.parse(
-      this.querySelector('script[type="uniforms"]')?.textContent ?? "{}"
-    );
-    this.vertexShader =
-      this.querySelector('script[type="vertex"]')?.textContent ?? "";
-    this.fragmentShader =
-      this.querySelector('script[type="fragment"]')?.textContent ?? "";
-    this.#mutationObserver = new MutationObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.target === this && entry.addedNodes.length > 0) {
-          for (const node of entry.addedNodes) {
-            if ((node as Element).tagName === "SCRIPT") {
-              switch ((node as HTMLScriptElement).type) {
-                case "vertex":
-                  this.vertexShader =
-                    (node as HTMLScriptElement).textContent ?? "";
-                  break;
-                case "fragment":
-                  this.fragmentShader =
-                    (node as HTMLScriptElement).textContent ?? "";
-                  break;
-                case "uniforms":
-                  this.uniforms = JSON.parse(
-                    (node as HTMLScriptElement).textContent ?? ""
-                  );
-                  break;
-              }
-            } else if (
-              (entry.target.parentElement as Element).tagName === "SCRIPT"
-            ) {
-              switch ((entry.target.parentElement as HTMLScriptElement).type) {
-                case "vertex":
-                  this.vertexShader =
-                    (entry.target.parentElement as HTMLScriptElement)
-                      .textContent ?? "";
-                  break;
-                case "fragment":
-                  this.fragmentShader =
-                    (entry.target.parentElement as HTMLScriptElement)
-                      .textContent ?? "";
-                  break;
-                case "uniforms":
-                  this.uniforms = JSON.parse(
-                    (entry.target.parentElement as HTMLScriptElement)
-                      .textContent ?? ""
-                  );
-                  break;
-              }
-            }
-          }
-        }
-        if (entry.target !== this) {
-          if ((entry.target as Element).tagName === "script") {
-            switch ((entry.target as HTMLScriptElement).type) {
-              case "vertex":
-                this.vertexShader =
-                  (entry.target as HTMLScriptElement).textContent ?? "";
-                break;
-              case "fragment":
-                this.fragmentShader =
-                  (entry.target as HTMLScriptElement).textContent ?? "";
-                break;
-              case "uniforms":
-                this.uniforms = JSON.parse(
-                  (entry.target as HTMLScriptElement).textContent ?? ""
-                );
-                break;
-            }
-          }
-        }
-      }
-    });
-    this.#mutationObserver.observe(this, {
-      childList: true,
-      attributes: true,
-      subtree: true,
-      characterData: true,
-    });
+  constructor() {
+    super();
+    this.#DEFAULT_VERTEX_SHADER = this._material.vertexShader;
+    this.#DEFAULT_FRAGMENT_SHADER = this._material.fragmentShader;
   }
 
   #convertStringPropertiesToAssets(uniforms: Record<string, IUniform<any>>) {
     for (const key in uniforms) {
       const uniform = uniforms[key];
       if (typeof uniform.value === "string") {
-        uniform.value = this.#obtainAsset(uniform.value);
+        uniform.value = this._obtainAsset(uniform.value);
       } else if (typeof uniform.value === "object" && uniform.value != null) {
         this.#convertStringPropertiesToAssets(uniform.value);
       }
@@ -165,8 +105,18 @@ export class G3DShaderMaterial extends G3DMaterialBase<ShaderMaterial> {
     return uniforms;
   }
 
-  #obtainAsset(id: string = "") {
-    return this._rendererContext?.getAsset(id) ?? null;
+  #handleAssetsChange(id: string) {
+    switch (id) {
+      case this.uniforms:
+        this.uniforms = id;
+        break;
+      case this.vertexShader:
+        this.vertexShader = id;
+        break;
+      case this.fragmentShader:
+        this.fragmentShader = id;
+        break;
+    }
   }
 }
 

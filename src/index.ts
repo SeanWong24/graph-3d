@@ -11,3 +11,4 @@ export * from "./components/ambient-light";
 export * from "./components/perspective-camera";
 export * from "./components/point-light";
 export * from "./components/texture";
+export * from "./components/script";

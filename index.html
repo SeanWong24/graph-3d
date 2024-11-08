@@ -44,6 +44,51 @@
         src="./textures/2k_earth_clouds.webp"
         color-space="srgb"
       ></g3d-texture>
+      <g3d-script id="halo-uniforms">
+        <script type="uniforms">
+          {
+            "coeficient": { "value": 1 },
+            "power": { "value": 3 },
+            "glowColor": { "value": [0.15, 0.21, 1] }
+          }
+        </script>
+      </g3d-script>
+      <g3d-script id="halo-vertex">
+        <script type="vertex">
+          varying vec3 vVertexWorldPosition;
+          varying vec3 vVertexNormal;
+
+          void main() {
+
+            vVertexNormal = normalize(normalMatrix * normal);
+
+            vVertexWorldPosition = (modelMatrix * vec4(position, 1.0)).xyz;
+
+            // set gl_Position
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        </script>
+      </g3d-script>
+      <g3d-script id="halo-fragment">
+        <script type="fragment">
+          uniform vec3 glowColor;
+          uniform float coeficient;
+          uniform float power;
+
+          varying vec3 vVertexNormal;
+          varying vec3 vVertexWorldPosition;
+
+          void main() {
+            vec3 worldCameraToVertex = vVertexWorldPosition - cameraPosition;
+            vec3 viewCameraToVertex = (viewMatrix * vec4(worldCameraToVertex, 0.0)).xyz;
+            viewCameraToVertex = normalize(viewCameraToVertex);
+            float intensity =
+                pow(coeficient + dot(vVertexNormal, viewCameraToVertex), power);
+
+            gl_FragColor = vec4(glowColor, intensity * 0.3  );
+          }
+        </script>
+      </g3d-script>
       <g3d-perspective-camera
         id="camera"
         position="0 0 5"
@@ -80,46 +125,12 @@
           </g3d-mesh>
           <g3d-mesh>
             <g3d-sphere-geometry radius="1.03"></g3d-sphere-geometry>
-            <g3d-shader-material transparent>
-              <script type="uniforms">
-                {
-                  "coeficient": { "value": 1 },
-                  "power": { "value": 3 },
-                  "glowColor": { "value": [0.15, 0.21, 1] }
-                }
-              </script>
-              <script type="vertex">
-                varying vec3 vVertexWorldPosition;
-                varying vec3 vVertexNormal;
-
-                void main() {
-
-                  vVertexNormal = normalize(normalMatrix * normal);
-
-                  vVertexWorldPosition = (modelMatrix * vec4(position, 1.0)).xyz;
-
-                  // set gl_Position
-                  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-                }
-              </script>
-              <script type="fragment">
-                uniform vec3 glowColor;
-                uniform float coeficient;
-                uniform float power;
-
-                varying vec3 vVertexNormal;
-                varying vec3 vVertexWorldPosition;
-
-                void main() {
-                  vec3 worldCameraToVertex = vVertexWorldPosition - cameraPosition;
-                  vec3 viewCameraToVertex = (viewMatrix * vec4(worldCameraToVertex, 0.0)).xyz;
-                  viewCameraToVertex = normalize(viewCameraToVertex);
-                  float intensity =
-                      pow(coeficient + dot(vVertexNormal, viewCameraToVertex), power);
-
-                  gl_FragColor = vec4(glowColor, intensity * 0.3  );
-                }
-              </script>
+            <g3d-shader-material
+              transparent
+              uniforms="halo-uniforms"
+              vertex-shader="halo-vertex"
+              fragment-shader="halo-fragment"
+            >
             </g3d-shader-material>
           </g3d-mesh>
         </g3d-mesh>

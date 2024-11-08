@@ -1,41 +1,31 @@
-import { consume } from "@lit/context";
-import { LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { ColorSpace, Texture, TextureLoader } from "three";
-import { RendererContext, rendererContext } from "../utils/context/renderer";
+import { G3DAssetBase } from "../utils/base/asset";
 
 @customElement("g3d-texture")
-export class G3DTexture extends LitElement {
+export class G3DTexture extends G3DAssetBase<Texture> {
   #texture?: Texture;
 
-  #id?: string;
-  @property({ reflect: true })
-  set id(value: string) {
-    this._rendererContext?.removeAsset(this.id);
-    this.#id = value;
-    this._rendererContext?.addAsset(this.id, this.#texture);
-  }
-  get id() {
-    return this.#id ?? "";
+  protected override get _asset() {
+    return this.#texture;
   }
 
+  #src?: string;
   @property({ reflect: true })
-  src?: string;
+  set src(value: string) {
+    this.#src = value;
+    this._initializeAsset().then(() => {
+      if (this.id) {
+        this._rendererContext?.addAsset(this.id, this._asset);
+      }
+    });
+  }
+  get src() {
+    return this.#src ?? "";
+  }
 
   @property({ reflect: true, attribute: "color-space" })
   colorSpace?: ColorSpace;
-
-  @consume({ context: rendererContext })
-  _rendererContext?: RendererContext;
-
-  async connectedCallback() {
-    super.connectedCallback();
-    this.#texture = await new TextureLoader().loadAsync(this.src ?? "");
-    this.#texture.colorSpace = this.colorSpace ?? "";
-    if (this.id) {
-      this._rendererContext?.addAsset(this.id, this.#texture);
-    }
-  }
 
   disconnectedCallback() {
     super.disconnectedCallback();
@@ -44,8 +34,9 @@ export class G3DTexture extends LitElement {
     }
   }
 
-  render() {
-    return null;
+  protected override async _initializeAsset() {
+    this.#texture = await new TextureLoader().loadAsync(this.src ?? "");
+    this.#texture.colorSpace = this.colorSpace ?? "";
   }
 }
 

@@ -38,12 +38,12 @@ export abstract class G3DMaterialBase<
     this._material.transparent = this.transparent;
   }
 
-  protected firstUpdated(_changedProperties: PropertyValues) {
+  protected override firstUpdated(_changedProperties: PropertyValues) {
     super.firstUpdated(_changedProperties);
     this.initializeMaterial();
   }
 
-  protected willUpdate(_changedProperties: PropertyValues): void {
+  protected override willUpdate(_changedProperties: PropertyValues): void {
     super.willUpdate(_changedProperties);
     this._material.needsUpdate = true;
     this._rendererContext?.rerender();
