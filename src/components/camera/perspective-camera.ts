@@ -1,7 +1,7 @@
 import { PropertyValues } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { PerspectiveCamera } from "three";
-import { ThreeObject3DBase } from "../utils/base/object-3d";
+import { ThreeObject3DBase } from "../../utils/base/object-3d";
 
 @customElement("g3d-perspective-camera")
 export class G3DPerspectiveCamera extends ThreeObject3DBase<PerspectiveCamera> {

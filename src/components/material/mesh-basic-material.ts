@@ -1,8 +1,8 @@
 import { consume } from "@lit/context";
 import { customElement, property } from "lit/decorators.js";
 import { Color, ColorRepresentation, MeshBasicMaterial, Texture } from "three";
-import { meshContext, MeshContext } from "../utils/context/mesh";
-import { G3DMaterialBase } from "../utils/base/material";
+import { meshContext, MeshContext } from "../../utils/context/mesh";
+import { G3DMaterialBase } from "../../utils/base/material";
 
 @customElement("g3d-mesh-basic-material")
 export class G3DMeshBasicMaterial extends G3DMaterialBase<MeshBasicMaterial> {

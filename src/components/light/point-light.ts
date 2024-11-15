@@ -1,6 +1,6 @@
 import { customElement, property } from "lit/decorators.js";
 import { PointLight } from "three";
-import { G3DLightBase } from "../utils/base/light";
+import { G3DLightBase } from "../../utils/base/light";
 
 @customElement("g3d-point-light")
 export class G3DPointLight extends G3DLightBase<PointLight> {

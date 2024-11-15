@@ -1,8 +1,8 @@
 import { consume } from "@lit/context";
 import { customElement, property } from "lit/decorators.js";
 import { IUniform, ShaderMaterial } from "three";
-import { meshContext, MeshContext } from "../utils/context/mesh";
-import { G3DMaterialBase } from "../utils/base/material";
+import { meshContext, MeshContext } from "../../utils/context/mesh";
+import { G3DMaterialBase } from "../../utils/base/material";
 
 @customElement("g3d-shader-material")
 export class G3DShaderMaterial extends G3DMaterialBase<ShaderMaterial> {

@@ -1,6 +1,6 @@
 import { customElement, property } from "lit/decorators.js";
 import { ColorSpace, Texture, TextureLoader } from "three";
-import { G3DAssetBase } from "../utils/base/asset";
+import { G3DAssetBase } from "../../utils/base/asset";
 
 @customElement("g3d-texture")
 export class G3DTexture extends G3DAssetBase<Texture> {

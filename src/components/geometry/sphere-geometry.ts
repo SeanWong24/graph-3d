@@ -2,8 +2,8 @@ import { consume } from "@lit/context";
 import { PropertyValues } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { SphereGeometry } from "three";
-import { meshContext, MeshContext } from "../utils/context/mesh";
-import { G3DBase } from "../utils/base/base";
+import { meshContext, MeshContext } from "../../utils/context/mesh";
+import { G3DBase } from "../../utils/base/base";
 
 @customElement("g3d-sphere-geometry")
 export class G3DSphereGeometry extends G3DBase {

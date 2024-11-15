@@ -1,5 +1,5 @@
 import { customElement } from "lit/decorators.js";
-import { G3DAssetBase } from "../utils/base/asset";
+import { G3DAssetBase } from "../../utils/base/asset";
 
 @customElement("g3d-script")
 export class G3DScript extends G3DAssetBase<string> {

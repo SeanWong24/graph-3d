@@ -3,17 +3,17 @@ import { customElement, property } from "lit/decorators.js";
 import {
   Color,
   ColorRepresentation,
-  MeshStandardMaterial,
+  MeshPhongMaterial,
   Texture,
   Vector2,
 } from "three";
-import { meshContext, MeshContext } from "../utils/context/mesh";
-import { G3DMaterialBase } from "../utils/base/material";
-import { vector2Converter } from "../utils/converter/vector2";
+import { meshContext, MeshContext } from "../../utils/context/mesh";
+import { G3DMaterialBase } from "../../utils/base/material";
+import { vector2Converter } from "../../utils/converter/vector2";
 
-@customElement("g3d-mesh-standard-material")
-export class G3DMeshStandardMaterial extends G3DMaterialBase<MeshStandardMaterial> {
-  protected override _material = new MeshStandardMaterial();
+@customElement("g3d-mesh-phong-material")
+export class G3DMeshPhongMaterial extends G3DMaterialBase<MeshPhongMaterial> {
+  protected override _material = new MeshPhongMaterial();
 
   #color?: ColorRepresentation;
   @property({ reflect: true })
@@ -81,6 +81,15 @@ export class G3DMeshStandardMaterial extends G3DMaterialBase<MeshStandardMateria
     return this._material.normalScale;
   }
 
+  @property({ type: Number })
+  set shininess(value: number) {
+    this.requestUpdate("shininess", this._material.shininess);
+    this._material.shininess = value;
+  }
+  get shininess() {
+    return this._material.shininess;
+  }
+
   @property({ type: Number, attribute: "emissive-intensity" })
   set emissiveIntensity(value: number) {
     this.requestUpdate("emissiveIntensity", this._material.emissiveIntensity);
@@ -111,6 +120,29 @@ export class G3DMeshStandardMaterial extends G3DMaterialBase<MeshStandardMateria
   }
   get emissiveMap() {
     return this.#emissiveMap;
+  }
+
+  #specular?: ColorRepresentation;
+  @property()
+  set specular(value: ColorRepresentation) {
+    this.requestUpdate("specular", this.#specular);
+    this._material.specular = new Color(value ?? "");
+  }
+  get specular() {
+    return this.#specular ?? `#${this._material.specular.getHexString()}`;
+  }
+
+  #specularMap?: string;
+  @property({ reflect: true, attribute: "specular-map" })
+  set specularMap(value: string | undefined) {
+    this.requestUpdate("specularMap", {});
+    this.#specularMap = value;
+    this._material.specularMap = this._obtainAsset(
+      this.#specularMap
+    ) as Texture;
+  }
+  get specularMap() {
+    return this.#specularMap;
   }
 
   @property({ type: Number, attribute: "displacement-bias" })
@@ -154,9 +186,12 @@ export class G3DMeshStandardMaterial extends G3DMaterialBase<MeshStandardMateria
     this._material.bumpScale = this.bumpScale;
     this._material.normalMap = this._obtainAsset(this.normalMap) as Texture;
     this._material.normalScale = this.normalScale;
+    this._material.shininess = this.shininess;
     this._material.emissiveIntensity = this.emissiveIntensity;
     this._material.emissive = new Color(this.emissive);
     this._material.emissiveMap = this._obtainAsset(this.emissiveMap) as Texture;
+    this._material.specular = new Color(this.specular);
+    this._material.specularMap = this._obtainAsset(this.specularMap) as Texture;
     this._material.displacementBias = this.displacementBias;
     this._material.displacementScale = this.displacementScale;
     this._material.displacementMap = this._obtainAsset(
@@ -181,6 +216,16 @@ export class G3DMeshStandardMaterial extends G3DMaterialBase<MeshStandardMateria
       case this.bumpMap:
         this._material.bumpMap = this._obtainAsset(this.bumpMap) as Texture;
       // @ts-expect-error
+      case this.#emissiveMap:
+        this._material.emissiveMap = this._obtainAsset(
+          this.#emissiveMap
+        ) as Texture;
+      // @ts-expect-error
+      case this.#specularMap:
+        this._material.specularMap = this._obtainAsset(
+          this.#specularMap
+        ) as Texture;
+      // @ts-expect-error
       case this.#displacementMap:
         this._material.displacementMap = this._obtainAsset(
           this.#displacementMap
@@ -196,6 +241,6 @@ export class G3DMeshStandardMaterial extends G3DMaterialBase<MeshStandardMateria
 
 declare global {
   interface HTMLElementTagNameMap {
-    "g3d-mesh-standard-material": G3DMeshStandardMaterial;
+    "g3d-mesh-phong-material": G3DMeshPhongMaterial;
   }
 }
