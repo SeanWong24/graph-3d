@@ -20,7 +20,7 @@ export abstract class ThreeObject3DBase<T extends Object3D> extends G3DBase {
     this.requestUpdate("visible", this._object.visible);
     this._object.visible = value;
   }
-  get() {
+  get visible() {
     return this._object.visible;
   }
 
