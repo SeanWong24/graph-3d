@@ -65,9 +65,21 @@ export class G3DShaderMaterial extends G3DMaterialBase<ShaderMaterial> {
     this.requestUpdate("uniforms", {});
     this.#uniforms = value;
     const code = this._obtainAsset(this.#uniforms) as string;
-    this._material.uniforms = this.#convertStringPropertiesToAssets(
+    const uniforms = this.#convertStringPropertiesToAssets(
       JSON.parse(code ?? "{}")
     );
+    for (const key in this._material.uniforms) {
+      if (!uniforms.hasOwnProperty(key)) {
+        delete this._material.uniforms[key];
+      }
+    }
+    for (const key in uniforms) {
+      if (this._material.uniforms[key]) {
+        this._material.uniforms[key].value = uniforms[key].value;
+        continue;
+      }
+      this._material.uniforms[key] = uniforms[key];
+    }
     this._material.uniformsNeedUpdate = true;
   }
   get uniforms() {
