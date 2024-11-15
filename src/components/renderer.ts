@@ -21,6 +21,7 @@ export class G3DRenderer extends G3DBase {
   #assetMap: Map<string, unknown> = new Map();
   #assetChangeWatchers: Set<(id: string) => void> = new Set();
   #resizeObserver?: ResizeObserver;
+  #shouldRerender = false;
 
   isReady = false;
 
@@ -34,7 +35,16 @@ export class G3DRenderer extends G3DBase {
       this.#scene = scene;
       this.#renderScene();
     },
-    rerender: () => this.#renderScene(),
+    rerender: () => {
+      if (this.#shouldRerender) {
+        return;
+      }
+      this.#shouldRerender = true;
+      requestAnimationFrame(() => {
+        this.#shouldRerender = false;
+        this.#renderScene();
+      });
+    },
     addAsset: (id, asset) => {
       if (!id) {
         return;
